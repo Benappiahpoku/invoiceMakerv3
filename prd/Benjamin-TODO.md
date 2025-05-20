@@ -1,11 +1,5 @@
 # Development Todos
 
-## General Ideas
-
-Benappiahpoku: #codebase  Is the code base and gave me a step by step task list to bring functionality to this. Assess the design that is the web  application and suggest if there needs to be any improvements made to just the design looking at usability.
-
-GitHub Copilot: Let me analyze the codebase and provide a step-by-step task list along with design/usability suggestions.
-
 ## Design Analysis & Usability Improvements
 
 ### Current Strengths
@@ -23,7 +17,7 @@ GitHub Copilot: Let me analyze the codebase and provide a step-by-step task list
    - Consider a bottom navigation bar for mobile users
    - Make the "Create Invoice" CTA more prominent
 
-2. **Form Experience** 
+2. **Form Experience**
    - Break long forms into step-by-step wizard interface
    - Add progress indicators for multi-step forms
    - Add "Save as Draft" functionality
@@ -41,7 +35,9 @@ GitHub Copilot: Let me analyze the codebase and provide a step-by-step task list
 ## Functionality Implementation Tasks
 
 ### Phase 1: Core Infrastructure
+
 1. Setup offline storage system:
+
 ```typescript
 - Implement IndexedDB for invoice storage
 - Add sync queue for offline changes
@@ -49,6 +45,7 @@ GitHub Copilot: Let me analyze the codebase and provide a step-by-step task list
 ```
 
 2. Implement network status management:
+
 ```typescript
 - Add connection quality detection
 - Create offline mode toggle
@@ -56,6 +53,8 @@ GitHub Copilot: Let me analyze the codebase and provide a step-by-step task list
 ```
 
 3. Basic invoice operations:
+4.
+
 ```typescript
 - Create invoice form validation
 - Add invoice number generation
@@ -63,21 +62,26 @@ GitHub Copilot: Let me analyze the codebase and provide a step-by-step task list
 ```
 
 ### Phase 2: Data Management
+
 4. Implement data persistence:
+
 ```typescript
+
 - Add draft saving functionality
 - Create auto-save feature
 - Setup local storage backup
 ```
 
-5. WhatsApp integration:
+1. WhatsApp integration:
+
 ```typescript
 - Create invoice sharing system
 - Add WhatsApp deep linking
 - Implement share preview
 ```
 
-6. Invoice templates:
+1. Invoice templates:
+
 ```typescript
 - Create template storage
 - Add template selection
@@ -85,7 +89,9 @@ GitHub Copilot: Let me analyze the codebase and provide a step-by-step task list
 ```
 
 ### Phase 3: User Experience
+
 7. Add user feedback systems:
+
 ```typescript
 - Implement toast notifications
 - Add loading states
@@ -93,6 +99,7 @@ GitHub Copilot: Let me analyze the codebase and provide a step-by-step task list
 ```
 
 8. Enhance form experience:
+
 ```typescript
 - Add multi-step form wizard
 - Create progress indicators
@@ -100,6 +107,7 @@ GitHub Copilot: Let me analyze the codebase and provide a step-by-step task list
 ```
 
 9. Optimize performance:
+
 ```typescript
 - Add lazy loading
 - Implement image optimization
@@ -107,7 +115,9 @@ GitHub Copilot: Let me analyze the codebase and provide a step-by-step task list
 ```
 
 ### Phase 4: Advanced Features
+
 10. PDF handling:
+
 ```typescript
 - Implement PDF preview
 - Add download functionality
@@ -115,6 +125,7 @@ GitHub Copilot: Let me analyze the codebase and provide a step-by-step task list
 ```
 
 11. Data backup:
+
 ```typescript
 - Add export functionality
 - Create import system
@@ -122,13 +133,14 @@ GitHub Copilot: Let me analyze the codebase and provide a step-by-step task list
 ```
 
 12. Progressive enhancements:
+
 ```typescript
 - Add PWA features
 - Create install prompts
 - Implement service workers
 ```
 
-## Prioritized Task List:
+## Prioritized Task List
 
 1. Implement core offline functionality first
 2. Add basic invoice creation and storage
