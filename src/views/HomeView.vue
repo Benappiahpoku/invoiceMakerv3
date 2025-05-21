@@ -236,22 +236,7 @@
               </div>
             </section>
 
-            <!-- Action Buttons (First Set) -->
-            <div class="flex justify-end space-x-4 pt-6 border-t">
-              <button
-                type="button"
-                @click="shareWhatsApp"
-                class="px-6 py-3 bg-green-600 text-white rounded-md hover:bg-green-700 transition duration-300"
-              >
-                Share WhatsApp
-              </button>
-              <button
-                type="submit"
-                class="px-6 py-3 bg-primary text-white rounded-md hover:bg-primary-dark transition duration-300"
-              >
-                Download PDF
-              </button>
-            </div>
+            
           </form>
         </div>
       </section>
@@ -262,22 +247,7 @@
         <div class="max-w-5xl mx-auto">
           <InvoicePreview :invoice="invoice" />
           
-          <!-- Action Buttons (Second Set) -->
-          <div class="flex justify-end space-x-4 mt-8">
-            <button
-              type="button"
-              @click="shareWhatsApp"
-              class="px-6 py-3 bg-green-600 text-white rounded-md hover:bg-green-700 transition duration-300"
-            >
-              Share WhatsApp
-            </button>
-            <button
-              type="submit"
-              class="px-6 py-3 bg-primary text-white rounded-md hover:bg-primary-dark transition duration-300"
-            >
-              Download PDF
-            </button>
-          </div>
+         
         </div>
       </section>
     </main>
@@ -329,10 +299,6 @@ const subtotal = computed(() => {
 const vat = computed(() => subtotal.value * 0.15)
 const total = computed(() => subtotal.value + vat.value)
 
-const shareWhatsApp = () => {
-  // To be implemented
-  console.log('Share via WhatsApp')
-}
 
 const handleSubmit = () => {
   // To be implemented

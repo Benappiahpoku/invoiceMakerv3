@@ -4,6 +4,7 @@ import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 import App from './App.vue'
 import router from './router'
 import './style.css'
+import '@fortawesome/fontawesome-free/css/all.css'
 
 // Import base components
 import AppButton from './components/base/AppButton.vue'
