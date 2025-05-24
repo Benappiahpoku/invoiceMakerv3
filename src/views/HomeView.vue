@@ -13,7 +13,7 @@
         >
           Create Your Free Invoice
         </router-link>
-      </section>
+      </section> 
 
       <!-- How It Works Section -->
       <section class="mb-16">
