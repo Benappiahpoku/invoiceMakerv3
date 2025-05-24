@@ -4,7 +4,9 @@
     <main class="max-w-7xl mx-auto px-4 py-8">
       <!-- Hero Section -->
       <section class="text-center mb-16">
-        <h1 class="text-4xl md:text-5xl font-bold text-primary mb-4">Simple, Fast & Free Invoicing for Your Business in Ghana</h1>
+        <h1 class="text-4xl md:text-5xl font-bold text-primary mb-4">
+          Simple, Fast & Free Invoicing for Your Business in Ghana
+        </h1>
         <p class="text-xl text-gray-600 mb-8">No Internet? No Problem</p>
         <p class="text-lg text-gray-500 mb-8">Offline-Ready Anytime, Anywhere.</p>
         <router-link
@@ -13,26 +15,44 @@
         >
           Create Your Free Invoice
         </router-link>
-      </section> 
+      </section>
 
       <!-- How It Works Section -->
       <section class="mb-16">
         <h2 class="text-3xl font-bold text-center mb-12">How It Works</h2>
         <div class="grid md:grid-cols-3 gap-8">
           <div class="text-center p-6 bg-white rounded-lg shadow-md">
-            <div class="w-12 h-12 bg-primary text-white rounded-full flex items-center justify-center mx-auto mb-4">1</div>
+            <div
+              class="w-12 h-12 bg-primary text-white rounded-full flex items-center justify-center mx-auto mb-4"
+            >
+              1
+            </div>
             <h3 class="text-xl font-semibold mb-4">Fill Invoice Details</h3>
-            <p class="text-gray-600">Enter your business information, client details, and invoice items quickly and easily.</p>
+            <p class="text-gray-600">
+              Enter your business information, client details, and invoice items quickly and easily.
+            </p>
           </div>
           <div class="text-center p-6 bg-white rounded-lg shadow-md">
-            <div class="w-12 h-12 bg-primary text-white rounded-full flex items-center justify-center mx-auto mb-4">2</div>
+            <div
+              class="w-12 h-12 bg-primary text-white rounded-full flex items-center justify-center mx-auto mb-4"
+            >
+              2
+            </div>
             <h3 class="text-xl font-semibold mb-4">Preview & Generate PDF</h3>
-            <p class="text-gray-600">Review your invoice and generate a professional PDF document with a single click.</p>
+            <p class="text-gray-600">
+              Review your invoice and generate a professional PDF document with a single click.
+            </p>
           </div>
           <div class="text-center p-6 bg-white rounded-lg shadow-md">
-            <div class="w-12 h-12 bg-primary text-white rounded-full flex items-center justify-center mx-auto mb-4">3</div>
+            <div
+              class="w-12 h-12 bg-primary text-white rounded-full flex items-center justify-center mx-auto mb-4"
+            >
+              3
+            </div>
             <h3 class="text-xl font-semibold mb-4">Share or Download</h3>
-            <p class="text-gray-600">Send your invoice via WhatsApp or download it for your records - works offline too!</p>
+            <p class="text-gray-600">
+              Send your invoice via WhatsApp or download it for your records - works offline too!
+            </p>
           </div>
         </div>
       </section>
@@ -65,20 +85,28 @@
             <section>
               <div class="flex justify-between items-center mb-6">
                 <h3 class="text-2xl font-bold text-primary">Company Details</h3>
-                <button type="button" class="text-blue-600 hover:text-blue-800">Load Saved Details</button>
+                <button type="button" class="text-blue-600 hover:text-blue-800">
+                  Load Saved Details
+                </button>
               </div>
 
               <div class="grid md:grid-cols-2 gap-6">
                 <div class="space-y-2">
-                  <label for="companyLogo" class="block text-sm font-medium text-gray-700">Company Logo</label>
-                  <div class="w-32 h-32 border-2 border-dashed border-gray-300 rounded-lg flex items-center justify-center">
+                  <label for="companyLogo" class="block text-sm font-medium text-gray-700"
+                    >Company Logo</label
+                  >
+                  <div
+                    class="w-32 h-32 border-2 border-dashed border-gray-300 rounded-lg flex items-center justify-center"
+                  >
                     <span class="text-gray-500">Click to upload</span>
                   </div>
                 </div>
 
                 <div class="space-y-4">
                   <div>
-                    <label for="companyName" class="block text-sm font-medium text-gray-700">Company Name</label>
+                    <label for="companyName" class="block text-sm font-medium text-gray-700"
+                      >Company Name</label
+                    >
                     <input
                       type="text"
                       id="companyName"
@@ -88,7 +116,9 @@
                   </div>
 
                   <div>
-                    <label for="companyPhone" class="block text-sm font-medium text-gray-700">Company Phone</label>
+                    <label for="companyPhone" class="block text-sm font-medium text-gray-700"
+                      >Company Phone</label
+                    >
                     <input
                       type="tel"
                       id="companyPhone"
@@ -105,7 +135,9 @@
               <h3 class="text-2xl font-bold text-primary mb-6">Customer Details</h3>
               <div class="grid md:grid-cols-2 gap-6">
                 <div>
-                  <label for="customerName" class="block text-sm font-medium text-gray-700">Customer Name</label>
+                  <label for="customerName" class="block text-sm font-medium text-gray-700"
+                    >Customer Name</label
+                  >
                   <input
                     type="text"
                     id="customerName"
@@ -115,7 +147,9 @@
                 </div>
 
                 <div>
-                  <label for="customerPhone" class="block text-sm font-medium text-gray-700">Customer Phone</label>
+                  <label for="customerPhone" class="block text-sm font-medium text-gray-700"
+                    >Customer Phone</label
+                  >
                   <input
                     type="tel"
                     id="customerPhone"
@@ -131,7 +165,9 @@
               <h3 class="text-2xl font-bold text-primary mb-6">Invoice Details</h3>
               <div class="grid md:grid-cols-2 gap-6">
                 <div>
-                  <label for="invoiceNumber" class="block text-sm font-medium text-gray-700">Invoice Number</label>
+                  <label for="invoiceNumber" class="block text-sm font-medium text-gray-700"
+                    >Invoice Number</label
+                  >
                   <input
                     type="text"
                     id="invoiceNumber"
@@ -141,7 +177,9 @@
                 </div>
 
                 <div>
-                  <label for="invoiceDate" class="block text-sm font-medium text-gray-700">Invoice Date</label>
+                  <label for="invoiceDate" class="block text-sm font-medium text-gray-700"
+                    >Invoice Date</label
+                  >
                   <input
                     type="date"
                     id="invoiceDate"
@@ -156,62 +194,90 @@
             <section>
               <div class="flex justify-between items-center mb-6">
                 <h3 class="text-2xl font-bold text-primary">Line Items</h3>
-                <button
-                  type="button"
-                  @click="addLineItem"
-                  class="bg-primary hover:bg-primary-dark text-white px-4 py-2 rounded-md transition duration-300"
-                >
-                  Add Item
-                </button>
               </div>
 
               <div class="space-y-4">
-                <div v-for="(item, index) in invoice.lineItems" :key="index" class="grid grid-cols-12 gap-4 items-center">
+                <!-- Add header row -->
+                <div
+                  class="hidden md:grid grid-cols-12 gap-4 items-center font-medium text-gray-700 mb-2"
+                >
+                  <div class="col-span-5">Description</div>
+                  <div class="col-span-2">Quantity</div>
+                  <div class="col-span-2">Price</div>
+                  <div class="col-span-2 text-right pr-12">Total</div>
+                  <div class="col-span-1"></div>
+                </div>
+                <div
+                  v-for="(item, index) in invoice.lineItems"
+                  :key="index"
+                  :class="[
+                    'md:grid md:grid-cols-12 md:gap-4 md:items-center',
+                    'flex flex-col space-y-4 md:space-y-0 p-4 mb-4 md:mb-0 bg-gray-50 md:bg-transparent rounded-lg md:rounded-none'
+                  ]"
+                >
+                  <!-- Mobile labels and inputs -->
                   <div class="col-span-5">
-                    <label :for="'description-'+index" class="sr-only">Description</label>
+                    <label :for="'description-' + index" class="block md:sr-only text-gray-600 mb-1"
+                      >Description</label
+                    >
                     <input
                       type="text"
-                      :id="'description-'+index"
+                      :id="'description-' + index"
                       v-model="item.description"
                       placeholder="Description"
                       class="block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary"
                     />
                   </div>
+
                   <div class="col-span-2">
-                    <label :for="'quantity-'+index" class="sr-only">Quantity</label>
+                    <label :for="'quantity-' + index" class="block md:sr-only text-gray-600 mb-1"
+                      >Quantity</label
+                    >
                     <input
                       type="number"
-                      :id="'quantity-'+index"
+                      :id="'quantity-' + index"
                       v-model="item.quantity"
                       placeholder="Qty"
                       class="block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary"
                     />
                   </div>
+
                   <div class="col-span-2">
-                    <label :for="'price-'+index" class="sr-only">Price</label>
+                    <label :for="'price-' + index" class="block md:sr-only text-gray-600 mb-1"
+                      >Price</label
+                    >
                     <input
                       type="number"
-                      :id="'price-'+index"
+                      :id="'price-' + index"
                       v-model="item.price"
                       placeholder="Price"
                       class="block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary"
                     />
                   </div>
+
                   <div class="col-span-2">
-                    <p class="text-right font-medium">₵{{ (item.quantity * item.price).toFixed(2) }}</p>
+                    <label class="block md:sr-only text-gray-600 mb-1">Total</label>
+                    <p class="text-right font-medium pr-12">
+                      ₵{{ (item.quantity * item.price).toFixed(2) }}
+                    </p>
                   </div>
-                  <div class="col-span-1">
-                    <button
-                      type="button"
-                      @click="removeLineItem(index)"
-                      class="text-red-600 hover:text-red-800"
-                      aria-label="Remove item"
-                    >
-                      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                      </svg>
-                    </button>
-                  </div>
+                </div>
+                <div class="flex flex-col md:flex-row justify-end gap-4 mt-4">
+                  <button
+                    type="button"
+                    @click="addLineItem"
+                    class="w-full md:w-auto bg-primary hover:bg-primary-dark text-white px-4 py-3 rounded-lg transition duration-300 text-sm md:text-base"
+                  >
+                    Add Item
+                  </button>
+                  <button
+                    type="button"
+                    @click="removeLastItem"
+                    :disabled="invoice.lineItems.length <= 1"
+                   class="w-full md:w-auto bg-primary hover:bg-primary-dark text-white px-4 py-3 rounded-lg transition duration-300 disabled:opacity-50 disabled:cursor-not-allowed text-sm md:text-base"
+                  >
+                    Remove Item
+                  </button>
                 </div>
               </div>
             </section>
@@ -235,8 +301,6 @@
                 </div>
               </div>
             </section>
-
-            
           </form>
         </div>
       </section>
@@ -246,8 +310,6 @@
         <h2 class="text-3xl font-bold text-center mb-12">Invoice Preview</h2>
         <div class="max-w-5xl mx-auto">
           <InvoicePreview :invoice="invoice" />
-          
-         
         </div>
       </section>
     </main>
@@ -288,17 +350,18 @@ const addLineItem = () => {
   invoice.value.lineItems.push({ description: '', quantity: 1, price: 0 })
 }
 
-const removeLineItem = (index: number) => {
-  invoice.value.lineItems.splice(index, 1)
+const removeLastItem = () => {
+  if (invoice.value.lineItems.length > 1) {
+    invoice.value.lineItems.pop()
+  }
 }
 
 const subtotal = computed(() => {
-  return invoice.value.lineItems.reduce((sum, item) => sum + (item.quantity * item.price), 0)
+  return invoice.value.lineItems.reduce((sum, item) => sum + item.quantity * item.price, 0)
 })
 
 const vat = computed(() => subtotal.value * 0.15)
 const total = computed(() => subtotal.value + vat.value)
-
 
 const handleSubmit = () => {
   // To be implemented

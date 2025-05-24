@@ -98,67 +98,95 @@
 
           <!-- Line Items Section -->
           <section>
-            <div class="flex justify-between items-center mb-6">
-              <h2 class="text-2xl font-bold text-primary">Line Items</h2>
-              <button
-                type="button"
-                @click="addLineItem"
-                class="bg-primary hover:bg-primary-dark text-white px-4 py-2 rounded-md transition duration-300"
-              >
-                Add Item
-              </button>
-            </div>
+              <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl font-bold text-primary">Line Items</h3>
+              </div>
 
-            <div class="space-y-4">
-              <div v-for="(item, index) in invoice.lineItems" :key="index" class="grid grid-cols-12 gap-4 items-center">
-                <div class="col-span-5">
-                  <label :for="'description-'+index" class="sr-only">Description</label>
-                  <input
-                    type="text"
-                    :id="'description-'+index"
-                    v-model="item.description"
-                    placeholder="Description"
-                    class="block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary"
-                  />
+              <div class="space-y-4">
+                <!-- Add header row -->
+                <div
+                  class="hidden md:grid grid-cols-12 gap-4 items-center font-medium text-gray-700 mb-2"
+                >
+                  <div class="col-span-5">Description</div>
+                  <div class="col-span-2">Quantity</div>
+                  <div class="col-span-2">Price</div>
+                  <div class="col-span-2 text-right pr-12">Total</div>
+                  <div class="col-span-1"></div>
                 </div>
-                <div class="col-span-2">
-                  <label :for="'quantity-'+index" class="sr-only">Quantity</label>
-                  <input
-                    type="number"
-                    :id="'quantity-'+index"
-                    v-model="item.quantity"
-                    placeholder="Qty"
-                    class="block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary"
-                  />
+                <div
+                  v-for="(item, index) in invoice.lineItems"
+                  :key="index"
+                  :class="[
+                    'md:grid md:grid-cols-12 md:gap-4 md:items-center',
+                    'flex flex-col space-y-4 md:space-y-0 p-4 mb-4 md:mb-0 bg-gray-50 md:bg-transparent rounded-lg md:rounded-none'
+                  ]"
+                >
+                  <!-- Mobile labels and inputs -->
+                  <div class="col-span-5">
+                    <label :for="'description-' + index" class="block md:sr-only text-gray-600 mb-1"
+                      >Description</label
+                    >
+                    <input
+                      type="text"
+                      :id="'description-' + index"
+                      v-model="item.description"
+                      placeholder="Description"
+                      class="block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary"
+                    />
+                  </div>
+
+                  <div class="col-span-2">
+                    <label :for="'quantity-' + index" class="block md:sr-only text-gray-600 mb-1"
+                      >Quantity</label
+                    >
+                    <input
+                      type="number"
+                      :id="'quantity-' + index"
+                      v-model="item.quantity"
+                      placeholder="Qty"
+                      class="block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary"
+                    />
+                  </div>
+
+                  <div class="col-span-2">
+                    <label :for="'price-' + index" class="block md:sr-only text-gray-600 mb-1"
+                      >Price</label
+                    >
+                    <input
+                      type="number"
+                      :id="'price-' + index"
+                      v-model="item.price"
+                      placeholder="Price"
+                      class="block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary"
+                    />
+                  </div>
+
+                  <div class="col-span-2">
+                    <label class="block md:sr-only text-gray-600 mb-1">Total</label>
+                    <p class="text-right font-medium pr-12">
+                      ₵{{ (item.quantity * item.price).toFixed(2) }}
+                    </p>
+                  </div>
                 </div>
-                <div class="col-span-2">
-                  <label :for="'price-'+index" class="sr-only">Price</label>
-                  <input
-                    type="number"
-                    :id="'price-'+index"
-                    v-model="item.price"
-                    placeholder="Price"
-                    class="block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary"
-                  />
-                </div>
-                <div class="col-span-2">
-                  <p class="text-right font-medium">₵{{ (item.quantity * item.price).toFixed(2) }}</p>
-                </div>
-                <div class="col-span-1">
+                <div class="flex flex-col md:flex-row justify-end gap-4 mt-4">
                   <button
                     type="button"
-                    @click="removeLineItem(index)"
-                    class="text-red-600 hover:text-red-800"
-                    aria-label="Remove item"
+                    @click="addLineItem"
+                    class="w-full md:w-auto bg-primary hover:bg-primary-dark text-white px-4 py-3 rounded-lg transition duration-300 text-sm md:text-base"
                   >
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
+                    Add Item
+                  </button>
+                  <button
+                    type="button"
+                    @click="removeLastItem"
+                    :disabled="invoice.lineItems.length <= 1"
+                   class="w-full md:w-auto bg-primary hover:bg-primary-dark text-white px-4 py-3 rounded-lg transition duration-300 disabled:opacity-50 disabled:cursor-not-allowed text-sm md:text-base"
+                  >
+                    Remove Item
                   </button>
                 </div>
               </div>
-            </div>
-          </section>
+            </section>
 
           <!-- Totals Section -->
           <section class="border-t pt-6">
@@ -231,9 +259,12 @@ const addLineItem = () => {
   invoice.value.lineItems.push({ description: '', quantity: 1, price: 0 })
 }
 
-const removeLineItem = (index: number) => {
-  invoice.value.lineItems.splice(index, 1)
+const removeLastItem = () => {
+  if (invoice.value.lineItems.length > 1) {
+    invoice.value.lineItems.pop()
+  }
 }
+
 
 const subtotal = computed(() => {
   return invoice.value.lineItems.reduce((sum, item) => sum + (item.quantity * item.price), 0)
