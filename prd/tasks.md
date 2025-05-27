@@ -1,140 +1,110 @@
 # Tasks
 
-1. **Navigation**
-  
-   - Make the "Create Invoice" CTA more prominent by adding a floating button for creating new invoices
+## VAT Mechanism Implementation Tasks
 
-2. **Form Experience**
-   - Break long forms into step-by-step wizard interface
-   - Add progress indicators for multi-step forms
-   - Add "Save as Draft" functionality
+### 1. Data Structure
 
-3. **Feedback & States**
-   - Add more visual feedback for offline/online states
-   - Implement skeleton loading states
-   - Add success/error toast notifications
+- [ ] Add a `vatType` field to your invoice data.
+- [ ] Add fields to track `vatAmount` and `total`.
 
-4. **Accessibility**
-   - Increase color contrast for better readability
-   - Add skip links for keyboard navigation
-   - Enhance focus states for form elements
+### 2. UI
 
-## Functionality Implementation Tasks
+- [ ] Create a dropdown or radio input for selecting VAT type:
+  - None
+  - Flat Rate (4%)
+  - Standard Rate (21.5%)
+- [ ] Default the VAT selection to "None".
 
-### Phase 1: Core Infrastructure
+### 3. Logic
 
-1. Setup offline storage system:
+- [ ] Write logic to calculate VAT based on selection:
+  - None → subtotal × 1
+  - Flat → subtotal × 0.04
+  - Standard → subtotal × 0.215
+- [ ] Ensure the VAT amount and total are recalculated whenever `subtotal` or `vatType` changes.
 
-```typescript
-- Implement IndexedDB for invoice storage
-- Add sync queue for offline changes
-- Create conflict resolution handlers
-```
+### 4. Display
 
-1.1 Implement network status management:
+- [ ] Show calculated VAT and total amount on the invoice summary.
+- [ ] Format VAT label to reflect selected rate (e.g., "VAT (4%)").
 
-```typescript
-- Add connection quality detection
-- Create offline mode toggle
-- Implement background sync
-```
+### 5. Persistence
 
-1.2  Basic invoice operations:
+- [ ] Ensure VAT selection and calculation are saved in local forage
+- [ ] Ensure VAT details appear in PDF/exported invoice
 
-```typescript
-- Create invoice form validation
-- Add invoice number generation
-- Implement PDF generation
-```
+### Help me implement the vat mechanism
 
-### Phase 2: Data Management
+the vat calculation is 3 options for the business in ghana
 
-1. Implement data persistence:
+1. none -> multiply the subtotal X 1 (None)
+4% -> multiply subtotal X 0.04(Flat Rate)
+21.5% -> multiply subtotal X 0.215 (standard rate)
+Default should be none
 
-```typescript
+## 1. Invoice Preview Component
 
-- Add draft saving functionality
-- Create auto-save feature
-- Setup local storage backup
-```
+- [ ] Create a dedicated `<InvoicePreview />` component.
+  - [ ] Accepts all invoice data as props (including logo).
+  - [ ] Renders invoice in a printable, mobile-friendly layout.
+  - [ ] Uses only Tailwind utility classes for styling.
+  - [ ] Handles missing data gracefully (shows placeholders).
+  - [ ] Supports offline rendering (no external dependencies for preview).
 
-1. WhatsApp integration:
+- [ ] Integrate `<InvoicePreview />` into your main invoice view.
+  - [ ] Pass current invoice data and logo as props.
+  - [ ] Place preview below the invoice form.
 
-```typescript
-- Create invoice sharing system
-- Add WhatsApp deep linking
-- Implement share preview
-```
+---
 
-1. Invoice templates:
+## 2. PDF Download Functionality
 
-```typescript
-- Create template storage
-- Add template selection
-- Implement template customization
-```
+- [ ] Install and configure `html2pdf.js` (or similar) for PDF export.
+  - [ ] Add as a dependency: `npm install html2pdf.js`
+  - [ ] Import and use only when needed (lazy load for performance).
 
-### Phase 3: User Experience
+- [ ] Add a **Download PDF** button.
+  - [ ] Button is large enough for touch (min 48x48px).
+  - [ ] Button is visible only when invoice data is valid.
 
-3.1 Add user feedback systems:
+- [ ] Implement PDF generation logic:
+  - [ ] Target the Invoice Preview section by `id` or `ref`.
+  - [ ] Generate PDF from the preview HTML.
+  - [ ] Save/download PDF with a clear filename (e.g., `Invoice-<number>.pdf`).
+  - [ ] Show loading state while generating PDF.
+  - [ ] Handle errors with simple, clear messages.
+  - [ ] Show a toast or alert after successful PDF download or WhatsApp share.
+  - [ ] Show a loading spinner or message during PDF generation.
 
-```typescript
-- Implement toast notifications
-- Add loading states
-- Create error handlers
-```
+---
 
-3.2 Enhance form experience:
+## 3. WhatsApp Sharing Integration
 
-```typescript
-- Add multi-step form wizard
-- Create progress indicators
-- Implement form validation
-```
+- [ ] Add a **Share via WhatsApp** button.  
+  - [ ] Button is touch-optimized and accessible.
+  - [ ] Button is visible only when invoice data is valid.
 
-3.3 Optimize performance:
+- [ ] Implement WhatsApp sharing logic:
+  - [ ]Share invoice summary as text (always works, no file upload).
 
-```typescript
-- Add lazy loading
-- Implement image optimization
-- Create performance monitoring
-```
+- [ ] Use Stratonea’s WhatsApp link generator utility for text sharing:
+  - [ ] Format invoice summary for WhatsApp (clear, simple, Ghana-friendly).
+  - [ ] Open WhatsApp with pre-filled message.
+  - [ ] Show a toast or alert after successful PDF download or WhatsApp share.
+  - [ ] Show a loading spinner or message during PDF generation.
 
-### Phase 4: Advanced Features
+## 4. Offline-First & Mobile-First Testing
 
-4.1 PDF handling:
+- [ ] Test all features on mobile (Android preferred).
+- [ ] Test PDF generation and WhatsApp sharing while offline (should show clear error or fallback).
+- [ ] Ensure all buttons and touch targets are at least 48x48px.
+- [ ] Confirm all error messages are in simple English with recovery steps.
 
-```typescript
-- Implement PDF preview
-- Add download functionality
-- Create print optimization
-```
+---
 
-4.2  Data backup:
+## 5. Documentation & Code Quality
 
-```typescript
-- Add export functionality
-- Create import system
-- Implement data validation
-```
-
-4.3 Progressive enhancements:
-
-```typescript
-- Add PWA features
-- Create install prompts
-- Implement service workers
-```
-
-## Prioritized Task List
-
-1. Implement core offline functionality first
-2. Add basic invoice creation and storage
-3. Create WhatsApp sharing integration
-4. Add form validation and error handling
-5. Implement PDF generation and preview
-6. Add data persistence and sync
-7. Create template system
-8. Implement performance optimizations
-9. Add PWA features
-10. Create backup/restore functionality
+- [ ] Add file-level and function-level comments explaining each section.
+- [ ] Use clear section headers in all files.
+- [ ] Follow Stratonea naming conventions and Tailwind usage guidelines.
+- [ ] Ensure all code is modular, minimal, and focused on the current task.

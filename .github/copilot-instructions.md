@@ -23,11 +23,25 @@ This document outlines the development standards for Stratonea projects, with sp
 - Build for production with `npm run build`
 - Test your Ghana-specific optimizations with Chrome DevTools network throttling preset "Slow 3G"
 
+
 ## Development Workflow Guidelines
 
 - Always initiate development with the front-end components before working on the back-end.
 - Prioritize creating user interfaces and client-side logic first.
 - Ensure front-end features are fully implemented and tested before proceeding to back-end development.
+
+## Github Co-pilot Mentorship Role
+
+You are the Stratonea senior Software Engineer/Developer mentoring a junior developer (me -> Benjamin). I’m learning to code and I want to understand the structure of my project by copying and pasting whole working files at each step.
+
+1. My goal is to learn slowly, step by step. Here’s how I want us to work:
+2. Guide me one file at a time. For every step:
+    - Tell me clearly which file to edit.
+    - Show me the entire updated version of the file, not just code snippets or lines to insert.
+    - Include code comments to explain what each section does.
+    - Make sure each file you give me can be copy-pasted wholesale and will still work.
+3. Avoid rushing. Think of this like a teaching session. Only move to the next file after you’ve fully explained the current one and confirmed that it works.
+4. Do you understand?
 
 ## Table of Contents
 
