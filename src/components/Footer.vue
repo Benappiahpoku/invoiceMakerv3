@@ -58,7 +58,7 @@
             <a href="https://wa.me/0594093926"
             target="_blank"
             rel="noopener noreferrer"> WhatsApp:+233-0594093926 </a><br />
-            <a  href="mailto:Stratoneaconsult@gmail.com">Email: Startonea@gmail.com </a>
+            <a  href="mailto:Stratoneaconsult@gmail.com">Email: Startoneaconsult@gmail.com </a>
           </span>
         </div>
 
