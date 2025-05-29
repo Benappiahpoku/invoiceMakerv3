@@ -3,6 +3,9 @@
   - Invoice creation form with company logo upload, preview, and persistence.
   - Ghana mobile-first, offline-friendly, touch-optimized.
   - Follows Stratonea coding/documentation standards.
+  - Now includes VAT mechanism with selectable VAT type and dynamic calculation.
+  - Now includes Save/Load/Clear Defaults for company info.
+   - Now connects ActionHub for PDF/WhatsApp sharing.
 -->
 
 <template>
@@ -16,53 +19,45 @@
           <section>
             <div class="flex justify-between items-center mb-6">
               <h2 class="text-2xl font-bold text-primary">Company Details</h2>
-              <button type="button" class="text-blue-600 hover:text-blue-800">Load Saved Details</button>
             </div>
-
             <div class="grid md:grid-cols-2 gap-6">
-
-              
               <!-- Logo Upload & Preview -->
               <div class="space-y-2">
                 <label for="companyLogo" class="block text-sm font-medium text-gray-700">
                   Company Logo
                 </label>
-
-                <!-- Company Logo Upload & Remove -->
-<div class="w-32 h-32 border-2 border-dashed border-gray-300 rounded-lg flex flex-col items-center justify-center relative bg-gray-50">
-  <!-- Logo Preview -->
-  <img
-    v-if="companyLogo"
-    :src="companyLogo"
-    alt="Company Logo"
-    class="object-contain w-full h-full rounded-lg"
-  />
-  <!-- Placeholder if no logo -->
-  <span v-else class="text-gray-400 text-xs text-center px-2">
-    Tap to upload
-  </span>
-  <!-- Remove Logo Button (z-20 so it's above the file input) -->
-  <button
-    v-if="companyLogo"
-    type="button"
-    @click.stop="removeLogo"
-    class="absolute top-1 right-1 bg-red-600 text-white rounded-full w-7 h-7 flex items-center justify-center shadow hover:bg-red-700 z-20"
-    aria-label="Remove Logo"
-  >
-    &times;
-  </button>
-  <!-- File input (z-10, does not cover remove button) -->
-  <input
-    id="companyLogo"
-    type="file"
-    accept="image/png,image/jpeg,image/jpg"
-    class="absolute inset-0 opacity-0 cursor-pointer z-10"
-    @change="handleLogoUpload"
-    aria-label="Upload company logo"
-  />
-</div>
-
-
+                <div
+                  class="w-32 h-32 border-2 border-dashed border-gray-300 rounded-lg flex flex-col items-center justify-center relative bg-gray-50"
+                >
+                  <!-- Logo Preview -->
+                  <img
+                    v-if="companyLogo"
+                    :src="companyLogo"
+                    alt="Company Logo"
+                    class="object-contain w-full h-full rounded-lg"
+                  />
+                  <!-- Placeholder if no logo -->
+                  <span v-else class="text-gray-400 text-xs text-center px-2"> Tap to upload </span>
+                  <!-- Remove Logo Button -->
+                  <button
+                    v-if="companyLogo"
+                    type="button"
+                    @click.stop="removeLogo"
+                    class="absolute top-1 right-1 bg-red-600 text-white rounded-full w-7 h-7 flex items-center justify-center shadow hover:bg-red-700 z-20"
+                    aria-label="Remove Logo"
+                  >
+                    &times;
+                  </button>
+                  <!-- File input -->
+                  <input
+                    id="companyLogo"
+                    type="file"
+                    accept="image/png,image/jpeg,image/jpg"
+                    class="absolute inset-0 opacity-0 cursor-pointer z-10"
+                    @change="handleLogoUpload"
+                    aria-label="Upload company logo"
+                  />
+                </div>
                 <!-- Show error if file is too large or wrong type -->
                 <p v-if="logoError" class="text-xs text-red-600 mt-1">{{ logoError }}</p>
               </div>
@@ -70,7 +65,9 @@
               <!-- Company Name & Phone -->
               <div class="space-y-4">
                 <div>
-                  <label for="companyName" class="block text-sm font-medium text-gray-700">Company Name</label>
+                  <label for="companyName" class="block text-sm font-medium text-gray-700"
+                    >Company Name</label
+                  >
                   <input
                     type="text"
                     id="companyName"
@@ -79,7 +76,9 @@
                   />
                 </div>
                 <div>
-                  <label for="companyPhone" class="block text-sm font-medium text-gray-700">Company Phone</label>
+                  <label for="companyPhone" class="block text-sm font-medium text-gray-700"
+                    >Company Phone</label
+                  >
                   <input
                     type="tel"
                     id="companyPhone"
@@ -87,6 +86,39 @@
                     class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary"
                   />
                 </div>
+                <!-- ===== [New Feature] START ===== -->
+                <!-- Save/Load/Clear Defaults Buttons and Feedback -->
+                <div class="flex gap-2 mt-2">
+                  <button
+                    type="button"
+                    class="text-blue-600 hover:text-blue-800"
+                    @click="loadDefaults"
+                  >
+                    📥&nbsp;Load Info
+                  </button>
+
+                  <button
+                    type="button"
+                    class="text-green-600 hover:text-green-800"
+                    @click="saveDefaults"
+                  >
+                    💾&nbsp;Save Info
+                  </button>
+                  <button
+                    type="button"
+                    class="text-red-600 hover:text-red-800"
+                    @click="clearDefaults"
+                  >
+                    🧹&nbsp;Clear Info
+                  </button>
+                </div>
+                <p v-if="defaultSavedMessage" class="text-green-600 text-sm mt-2">
+                  {{ defaultSavedMessage }}
+                </p>
+                <p v-if="defaultErrorMessage" class="text-red-600 text-sm mt-2">
+                  {{ defaultErrorMessage }}
+                </p>
+                <!-- ===== [New Feature] END ===== -->
               </div>
             </div>
           </section>
@@ -96,7 +128,9 @@
             <h2 class="text-2xl font-bold text-primary mb-6">Customer Details</h2>
             <div class="grid md:grid-cols-2 gap-6">
               <div>
-                <label for="customerName" class="block text-sm font-medium text-gray-700">Customer Name</label>
+                <label for="customerName" class="block text-sm font-medium text-gray-700"
+                  >Customer Name</label
+                >
                 <input
                   type="text"
                   id="customerName"
@@ -105,7 +139,9 @@
                 />
               </div>
               <div>
-                <label for="customerPhone" class="block text-sm font-medium text-gray-700">Customer Phone</label>
+                <label for="customerPhone" class="block text-sm font-medium text-gray-700"
+                  >Customer Phone</label
+                >
                 <input
                   type="tel"
                   id="customerPhone"
@@ -121,7 +157,9 @@
             <h2 class="text-2xl font-bold text-primary mb-6">Invoice Details</h2>
             <div class="grid md:grid-cols-2 gap-6">
               <div>
-                <label for="invoiceNumber" class="block text-sm font-medium text-gray-700">Invoice Number</label>
+                <label for="invoiceNumber" class="block text-sm font-medium text-gray-700"
+                  >Invoice Number</label
+                >
                 <input
                   type="text"
                   id="invoiceNumber"
@@ -130,7 +168,9 @@
                 />
               </div>
               <div>
-                <label for="invoiceDate" class="block text-sm font-medium text-gray-700">Invoice Date</label>
+                <label for="invoiceDate" class="block text-sm font-medium text-gray-700"
+                  >Invoice Date</label
+                >
                 <input
                   type="date"
                   id="invoiceDate"
@@ -148,7 +188,9 @@
             </div>
             <div class="space-y-4">
               <!-- Table header for desktop -->
-              <div class="hidden md:grid grid-cols-12 gap-4 items-center font-medium text-gray-700 mb-2">
+              <div
+                class="hidden md:grid grid-cols-12 gap-4 items-center font-medium text-gray-700 mb-2"
+              >
                 <div class="col-span-5">Description</div>
                 <div class="col-span-2">Quantity</div>
                 <div class="col-span-2">Price</div>
@@ -165,7 +207,9 @@
                 ]"
               >
                 <div class="col-span-5">
-                  <label :for="'description-' + index" class="block md:sr-only text-gray-600 mb-1">Description</label>
+                  <label :for="'description-' + index" class="block md:sr-only text-gray-600 mb-1"
+                    >Description</label
+                  >
                   <input
                     type="text"
                     :id="'description-' + index"
@@ -175,7 +219,9 @@
                   />
                 </div>
                 <div class="col-span-2">
-                  <label :for="'quantity-' + index" class="block md:sr-only text-gray-600 mb-1">Quantity</label>
+                  <label :for="'quantity-' + index" class="block md:sr-only text-gray-600 mb-1"
+                    >Quantity</label
+                  >
                   <input
                     type="number"
                     :id="'quantity-' + index"
@@ -185,7 +231,9 @@
                   />
                 </div>
                 <div class="col-span-2">
-                  <label :for="'price-' + index" class="block md:sr-only text-gray-600 mb-1">Price</label>
+                  <label :for="'price-' + index" class="block md:sr-only text-gray-600 mb-1"
+                    >Price</label
+                  >
                   <input
                     type="number"
                     :id="'price-' + index"
@@ -222,6 +270,23 @@
             </div>
           </section>
 
+          <!-- VAT Selection Section -->
+          <section>
+            <label for="vatType" class="block text-sm font-medium text-gray-700 mb-2"
+              >VAT Type</label
+            >
+            <select
+              id="vatType"
+              v-model="invoice.vatType"
+              @change="persistVatType"
+              class="block w-full max-w-xs rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary"
+            >
+              <option value="none">None (0%)</option>
+              <option value="flat">Flat Rate (4%)</option>
+              <option value="standard">Standard Rate (21.5%)</option>
+            </select>
+          </section>
+
           <!-- Totals Section -->
           <section class="border-t pt-6">
             <div class="flex justify-end">
@@ -231,8 +296,8 @@
                   <span>₵{{ subtotal.toFixed(2) }}</span>
                 </div>
                 <div class="flex justify-between">
-                  <span class="font-medium">VAT (4%):</span>
-                  <span>₵{{ vat.toFixed(2) }}</span>
+                  <span class="font-medium">VAT ({{ vatLabel }}):</span>
+                  <span>₵{{ vatAmount.toFixed(2) }}</span>
                 </div>
                 <div class="flex justify-between text-lg font-bold">
                   <span>Total:</span>
@@ -247,11 +312,23 @@
       <!-- Preview Section -->
       <section class="mt-16 pt-16 border-t border-gray-200">
         <h2 class="text-3xl font-bold text-center mb-12">Invoice Preview</h2>
-        <div class="max-w-5xl mx-auto">
+        <div class="max-w-5xl mx-auto" id="invoice-preview-pdf">
           <!-- Pass logo as prop to preview if needed -->
           <InvoicePreview :invoice="invoice" :companyLogo="companyLogo" />
         </div>
       </section>
+
+ <!-- ===== [New Feature] START ===== -->
+      <!-- ActionHub: Floating action bar for PDF/WhatsApp sharing -->
+
+      <ActionHub
+        :invoice="invoice"
+        :companyLogo="companyLogo"
+        @download-pdf="handleDownloadPDF"
+        @share-whatsapp="handleShareWhatsApp"
+      />
+      <!-- ===== [New Feature] END ===== -->
+
     </div>
   </div>
 </template>
@@ -262,13 +339,26 @@
 // - Allows uploading, previewing, and persisting a company logo (with localForage).
 // - Mobile-first, touch-optimized, and Ghana-ready.
 // - All logic is self-contained for learning and clarity.
+// - Now includes VAT mechanism with selectable VAT type and dynamic calculation.
+// - Now connects ActionHub for PDF/WhatsApp sharing.
 
 // ===== Imports =====
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, watch } from 'vue'
 import localforage from 'localforage'
 import InvoicePreview from '@/components/InvoicePreview.vue'
+// ===== [New Feature] START =====
+import ActionHub from '@/components/ActionHub.vue'
+// ===== [New Feature] END =====
+import html2pdf from 'html2pdf.js'
+
 
 // ===== Types & Interfaces =====
+
+/**
+ * Supported VAT types for Ghanaian businesses.
+ */
+type VatType = 'none' | 'flat' | 'standard'
+
 interface LineItem {
   description: string
   quantity: number
@@ -283,11 +373,12 @@ interface Invoice {
   invoiceNumber: string
   invoiceDate: string
   lineItems: LineItem[]
+  vatType: VatType // NEW: VAT type selection
 }
 
 // ===== Reactive State =====
 
-// Main invoice data
+// Main invoice data, with VAT type defaulting to 'none'
 const invoice = ref<Invoice>({
   companyName: '',
   companyPhone: '',
@@ -295,7 +386,8 @@ const invoice = ref<Invoice>({
   customerPhone: '',
   invoiceNumber: '',
   invoiceDate: new Date().toISOString().split('T')[0],
-  lineItems: [{ description: '', quantity: 1, price: 0 }]
+  lineItems: [{ description: '', quantity: 1, price: 0 }],
+  vatType: 'none' // Default VAT type is 'none'
 })
 
 // Holds the base64 logo string (or null)
@@ -303,6 +395,60 @@ const companyLogo = ref<string | null>(null)
 
 // Error message for logo upload
 const logoError = ref<string | null>(null)
+
+// ===== [Save Defaults Feature] START =====
+// Feedback state for Save/Load/Clear Defaults
+const defaultSavedMessage = ref<string | null>(null)
+const defaultErrorMessage = ref<string | null>(null)
+
+/**
+ * Saves current company info as defaults in localforage.
+ * Only saves companyName and companyPhone.
+ * Shows a success or error message.
+ */
+async function saveDefaults() {
+  if (!invoice.value.companyName || !invoice.value.companyPhone) {
+    defaultErrorMessage.value = 'Please fill in company name and phone before saving.'
+    defaultSavedMessage.value = null
+    return
+  }
+  await localforage.setItem('defaultSettings', {
+    companyName: invoice.value.companyName,
+    companyPhone: invoice.value.companyPhone
+  })
+  defaultSavedMessage.value = 'Defaults saved!'
+  defaultErrorMessage.value = null
+}
+
+/**
+ * Loads saved defaults from localforage and pre-fills company info fields.
+ * Does not trigger form submission or overwrite other fields.
+ */
+async function loadDefaults() {
+  const defaults = await localforage.getItem<{ companyName: string; companyPhone: string }>(
+    'defaultSettings'
+  )
+  if (defaults) {
+    invoice.value.companyName = defaults.companyName
+    invoice.value.companyPhone = defaults.companyPhone
+    defaultSavedMessage.value = 'Defaults loaded.'
+    defaultErrorMessage.value = null
+  } else {
+    defaultErrorMessage.value = 'No defaults found.'
+    defaultSavedMessage.value = null
+  }
+}
+
+/**
+ * Clears saved defaults from localforage.
+ * Shows a confirmation message.
+ */
+async function clearDefaults() {
+  await localforage.removeItem('defaultSettings')
+  defaultSavedMessage.value = 'Defaults cleared.'
+  defaultErrorMessage.value = null
+}
+// ===== [Save Defaults Feature] END =====
 
 // ===== Helper Functions =====
 
@@ -342,14 +488,30 @@ async function handleLogoUpload(event: Event) {
 }
 
 /**
- * Loads logo from localForage on mount.
- * If found, sets preview.
+ * Loads logo and VAT type from localForage on mount.
+ * If found, sets preview and VAT selection.
  */
 onMounted(async () => {
   const storedLogo = await localforage.getItem<string>('companyLogo')
   if (storedLogo) {
     companyLogo.value = storedLogo
   }
+  // Restore VAT type if previously saved
+  const storedVatType = await localforage.getItem<VatType>('vatType')
+  if (storedVatType) {
+    invoice.value.vatType = storedVatType
+  }
+
+  // ===== [Save Defaults Feature] START =====
+  // Load company info defaults if present
+  const defaults = await localforage.getItem<{ companyName: string; companyPhone: string }>(
+    'defaultSettings'
+  )
+  if (defaults) {
+    invoice.value.companyName = defaults.companyName
+    invoice.value.companyPhone = defaults.companyPhone
+  }
+  // ===== [Save Defaults Feature] END =====
 })
 
 /**
@@ -360,6 +522,13 @@ async function removeLogo() {
   await localforage.removeItem('companyLogo')
   companyLogo.value = null
   alert('Logo removed.') // Replace with toast if you have one
+}
+
+/**
+ * Persists VAT type selection in localForage.
+ */
+async function persistVatType() {
+  await localforage.setItem('vatType', invoice.value.vatType)
 }
 
 // ===== Line Items Logic =====
@@ -386,18 +555,56 @@ function removeLastItem() {
  * Calculates subtotal of all line items.
  */
 const subtotal = computed(() =>
-  invoice.value.lineItems.reduce((sum, item) => sum + (item.quantity * item.price), 0)
+  invoice.value.lineItems.reduce((sum, item) => sum + item.quantity * item.price, 0)
 )
 
 /**
- * Calculates VAT (4%).
+ * Returns the VAT label for display based on selection.
  */
-const vat = computed(() => subtotal.value * 0.04)
+const vatLabel = computed(() => {
+  switch (invoice.value.vatType) {
+    case 'flat':
+      return '4%'
+    case 'standard':
+      return '21.5%'
+    default:
+      return '0%'
+  }
+})
+
+/**
+ * Calculates VAT amount based on selected VAT type.
+ * - none: 0%
+ * - flat: 4%
+ * - standard: 21.5%
+ */
+const vatAmount = computed(() => {
+  switch (invoice.value.vatType) {
+    case 'flat':
+      return subtotal.value * 0.04
+    case 'standard':
+      return subtotal.value * 0.215
+    default:
+      return 0
+  }
+})
 
 /**
  * Calculates total (subtotal + VAT).
  */
-const total = computed(() => subtotal.value + vat.value)
+const total = computed(() => subtotal.value + vatAmount.value)
+
+// ===== Watchers =====
+
+/**
+ * Watch VAT type and persist to localForage whenever it changes.
+ */
+watch(
+  () => invoice.value.vatType,
+  async (newType) => {
+    await localforage.setItem('vatType', newType)
+  }
+)
 
 // ===== Form Submission (stub) =====
 
@@ -410,4 +617,68 @@ function handleSubmit() {
   console.log('Download PDF')
 }
 
+// ===== [New Feature] START =====
+/**
+ * Handles PDF download event from ActionHub.
+ * Uses html2pdf.js to generate and download a PDF of the invoice preview.
+ * Ghana-ready: simple, mobile-first, and works offline.
+ */
+ function handleDownloadPDF() {
+  // 1. Find the preview DOM node
+  const previewEl = document.getElementById('invoice-preview-pdf')
+  if (!previewEl) {
+    alert('Could not find invoice preview to export. Please try again.')
+    return
+  }
+
+  // 2. Configure html2pdf options for Ghana mobile users
+  const fileName = `Invoice-${invoice.value.invoiceNumber || 'Ghana'}.pdf`
+  const opt = {
+    margin:       0.2, // Small margin for mobile
+    filename:     fileName,
+    image:        { type: 'jpeg', quality: 0.98 },
+    html2canvas:  { scale: 2, useCORS: true },
+    jsPDF:        { unit: 'in', format: 'a4', orientation: 'portrait' }
+  }
+
+  // 3. Generate and save PDF
+  html2pdf()
+    .set(opt)
+    .from(previewEl)
+    .save()
+    .catch(() => {
+      alert('Could not generate PDF. Please try again or check your internet connection.')
+    })
+}
+
+/**
+ * Handles WhatsApp share event from ActionHub.
+ * Generates a WhatsApp message link with invoice summary and opens it.
+ * Ghana-ready: uses simple text, no attachments (for bandwidth).
+ */
+function handleShareWhatsApp() {
+  // 1. Build invoice summary message
+  const lines = [
+    `*Invoice from ${invoice.value.companyName || 'My Company'}*`,
+    `Date: ${invoice.value.invoiceDate}`,
+    `Customer: ${invoice.value.customerName || ''}`,
+    '',
+    ...invoice.value.lineItems.map(
+      (item, idx) =>
+        `${idx + 1}. ${item.description} - Qty: ${item.quantity}, Price: ₵${item.price}, Total: ₵${(item.quantity * item.price).toFixed(2)}`
+    ),
+    '',
+    `Subtotal: ₵${subtotal.value.toFixed(2)}`,
+    `VAT (${vatLabel.value}): ₵${vatAmount.value.toFixed(2)}`,
+    `*Total: ₵${total.value.toFixed(2)}*`
+  ]
+  const message = lines.join('\n')
+
+  // 2. Format WhatsApp link (no phone number, just message)
+  const waUrl = `https://wa.me/?text=${encodeURIComponent(message)}`
+
+  // 3. Open WhatsApp (new tab/window)
+  window.open(waUrl, '_blank')
+}
+// ===== [New Feature] END =====
 </script>

@@ -3,7 +3,7 @@ interface Config {
 }
 
 const config: Config = {
-  projectName: 'invoiceMakerV3'
+  projectName: 'invoice-maker-v4'
 };
 
 export default config;

@@ -73,17 +73,16 @@
     </main>
 
     <!-- Donation content -->
-    <!-- <Donation v-if="showDonation" @close="handleDonationClose" /> -->
+    <Donation v-if="showDonation" @close="handleDonationClose" />
 
       <!-- To Always See and Edit Donation Control  -->
 
-    <Donation v-if="showDonation" @close="showDonation = false" />
+    <!-- <Donation v-if="showDonation" @close="showDonation = false" /> -->
 
   <!-- Footer -->
   <Footer />
 
-    <!-- Action Hub -->
-    <ActionHub />
+ 
   </div>
 </template>
 
@@ -94,22 +93,22 @@ import { useNetworkStatus } from '@/composables/useNetworkStatus'
 import { ref } from 'vue'
 import OfflineIndicator from '@/components/base/OfflineIndicator.vue'
 import StratoneaLogo from '@/components/StratoneaLogo.vue'
-import ActionHub from '@/components/ActionHub.vue'
+
 import Footer from '@/components/Footer.vue'
  import Donation from '@/components/Donation.vue'
 
 
   //== To Always See and Edit Donation Control ==//
-  const showDonation = ref(true)
+  // const showDonation = ref(true)
 
   //== To Always See and Edit Donation Control ==//
 
 
 
  // ===== Constants & Config =====
-// const DONATION_MODAL_KEY = 'stratonea_donation_last_closed'
-// const DONATION_MODAL_FIRST_SEEN_KEY = 'stratonea_first_seen'
-// const DONATION_MODAL_INTERVAL = 7 * 24 * 60 * 60 * 1000 // 7 days in ms
+const DONATION_MODAL_KEY = 'stratonea_donation_last_closed'
+const DONATION_MODAL_FIRST_SEEN_KEY = 'stratonea_first_seen'
+const DONATION_MODAL_INTERVAL = 7 * 24 * 60 * 60 * 1000 // 7 days in ms
 
 // ===== Helper Functions =====
 
@@ -117,47 +116,47 @@ import Footer from '@/components/Footer.vue'
  * Returns the timestamp of the user's first visit.
  * If not set, sets it to now and returns now.
  */
-// function getOrSetFirstSeen(): number {
-//   let firstSeen = localStorage.getItem(DONATION_MODAL_FIRST_SEEN_KEY)
-//   if (!firstSeen) {
-//     const now = Date.now()
-//     localStorage.setItem(DONATION_MODAL_FIRST_SEEN_KEY, now.toString())
-//     return now
-//   }
-//   return parseInt(firstSeen, 10)
-// }
+function getOrSetFirstSeen(): number {
+  let firstSeen = localStorage.getItem(DONATION_MODAL_FIRST_SEEN_KEY)
+  if (!firstSeen) {
+    const now = Date.now()
+    localStorage.setItem(DONATION_MODAL_FIRST_SEEN_KEY, now.toString())
+    return now
+  }
+  return parseInt(firstSeen, 10)
+}
 
 /**
  * Determines if the donation modal should be shown.
  * - Only show if at least 7 days have passed since first visit.
  * - After first show, only show every 7 days after last closed.
  */
-// function shouldShowDonationModal(): boolean {
-//   const now = Date.now()
-//   const firstSeen = getOrSetFirstSeen()
-//   // Don't show until 7 days after first visit
-//   if (now - firstSeen < DONATION_MODAL_INTERVAL) return false
+function shouldShowDonationModal(): boolean {
+  const now = Date.now()
+  const firstSeen = getOrSetFirstSeen()
+  // Don't show until 7 days after first visit
+  if (now - firstSeen < DONATION_MODAL_INTERVAL) return false
 
-//   const lastClosed = localStorage.getItem(DONATION_MODAL_KEY)
-//   if (!lastClosed) return true // Never closed before, show after 7 days
-//   const lastClosedTime = parseInt(lastClosed, 10)
-//   return isNaN(lastClosedTime) || now - lastClosedTime > DONATION_MODAL_INTERVAL
-// }
+  const lastClosed = localStorage.getItem(DONATION_MODAL_KEY)
+  if (!lastClosed) return true // Never closed before, show after 7 days
+  const lastClosedTime = parseInt(lastClosed, 10)
+  return isNaN(lastClosedTime) || now - lastClosedTime > DONATION_MODAL_INTERVAL
+}
 
 /**
  * Records the current time as the last time the donation modal was closed.
  */
-// function recordDonationModalClosed(): void {
-//   localStorage.setItem(DONATION_MODAL_KEY, Date.now().toString())
-// }
+function recordDonationModalClosed(): void {
+  localStorage.setItem(DONATION_MODAL_KEY, Date.now().toString())
+}
 
 // ===== Main Logic =====
-// const showDonation = ref(shouldShowDonationModal())
+const showDonation = ref(shouldShowDonationModal())
 
-// function handleDonationClose() {
-//   recordDonationModalClosed()
-//   showDonation.value = false
-// }
+function handleDonationClose() {
+  recordDonationModalClosed()
+  showDonation.value = false
+}
 
   // ==== End Donation Control in Parent Component //
 

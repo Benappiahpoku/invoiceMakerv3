@@ -1,5 +1,18 @@
 # Tasks
 
+## Github Behaviour
+
+You are the Stratonea senior Software Engineer/Developer mentoring a junior developer (me -> Benjamin). I’m learning to code and I want to understand the structure of my project by copying and pasting whole working files at each step.
+
+1. My goal is to learn slowly, step by step. Here’s how I want us to work:
+2. Guide me one file at a time. For every step:
+    - Tell me clearly which file to edit.
+    - Show me the entire updated version of the file, not just code snippets or lines to insert.
+    - Include code comments to explain what each section does.
+    - Make sure each file you give me can be copy-pasted wholesale and will still work. When editing existing code, use comments to clearly mark the changes you made  <!-- ===== [New Feature] START ===== --> and <!-- ===== [New Feature] END ===== -->.
+3. Avoid rushing. Think of this like a teaching session. Only move to the next file after you’ve fully explained the current one and confirmed that it works.
+4. Do you understand?
+
 ## VAT Mechanism Implementation Tasks
 
 ### 1. Data Structure
@@ -42,6 +55,8 @@ the vat calculation is 3 options for the business in ghana
 21.5% -> multiply subtotal X 0.215 (standard rate)
 Default should be none
 
+------------------------------------ Above  Done
+
 ## 1. Invoice Preview Component
 
 - [ ] Create a dedicated `<InvoicePreview />` component.
@@ -54,8 +69,6 @@ Default should be none
 - [ ] Integrate `<InvoicePreview />` into your main invoice view.
   - [ ] Pass current invoice data and logo as props.
   - [ ] Place preview below the invoice form.
-
----
 
 ## 2. PDF Download Functionality
 
