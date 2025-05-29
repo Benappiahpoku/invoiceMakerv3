@@ -102,7 +102,7 @@
           class="bg-gray-50 rounded-lg p-4 flex flex-col"
         >
           <div class="flex justify-between">
-            <span class="font-medium text-gray-700">Description:</span>
+            <span class="font-medium text-gray-700 ">Description:</span>
             <span>{{ item.description || 'Item' }}</span>
           </div>
           <div class="flex justify-between">
