@@ -245,7 +245,7 @@
                 <div class="col-span-2">
                   <label class="block md:sr-only text-gray-600 mb-1">Total</label>
                   <p class="text-right font-medium pr-12">
-                    ₵{{ (item.quantity * item.price).toFixed(2) }}
+                    ₵{{ formatCurrency(item.quantity * item.price) }}
                   </p>
                 </div>
               </div>
@@ -283,7 +283,7 @@
             >
               <option value="none">None (0%)</option>
               <option value="flat">Flat Rate (4%)</option>
-              <option value="standard">Standard Rate (21.5%)</option>
+              <option value="standard">Standard Rate (21.9%)</option>
             </select>
           </section>
 
@@ -293,15 +293,15 @@
               <div class="w-64 space-y-3">
                 <div class="flex justify-between">
                   <span class="font-medium">Subtotal:</span>
-                  <span>₵{{ subtotal.toFixed(2) }}</span>
+                  <span>₵{{ formatCurrency(subtotal)  }}</span>
                 </div>
                 <div class="flex justify-between">
                   <span class="font-medium">VAT ({{ vatLabel }}):</span>
-                  <span>₵{{ vatAmount.toFixed(2) }}</span>
+                  <span>₵{{ formatCurrency(vatAmount) }}</span>
                 </div>
                 <div class="flex justify-between text-lg font-bold">
                   <span>Total:</span>
-                  <span>₵{{ total.toFixed(2) }}</span>
+                  <span>₵{{ formatCurrency(total) }}</span>
                 </div>
               </div>
             </div>
@@ -564,7 +564,7 @@ const vatLabel = computed(() => {
     case 'flat':
       return '4%'
     case 'standard':
-      return '21.5%'
+      return '21.9%'
     default:
       return '0%'
   }
@@ -574,14 +574,14 @@ const vatLabel = computed(() => {
  * Calculates VAT amount based on selected VAT type.
  * - none: 0%
  * - flat: 4%
- * - standard: 21.5%
+ * - standard: 21.9%
  */
 const vatAmount = computed(() => {
   switch (invoice.value.vatType) {
     case 'flat':
       return subtotal.value * 0.04
     case 'standard':
-      return subtotal.value * 0.215
+      return subtotal.value * 0.219
     default:
       return 0
   }
@@ -674,29 +674,66 @@ function handleSubmit() {
  * Generates a WhatsApp message link with invoice summary and opens it.
  * Ghana-ready: uses simple text, no attachments (for bandwidth).
  */
+// ===== [Update] WhatsApp Share Formatting =====
 function handleShareWhatsApp() {
-  // 1. Build invoice summary message
+  // 1. Build invoice summary message with improved formatting
   const lines = [
-    `*Invoice from ${invoice.value.companyName || 'My Company'}*`,
-    `Date: ${invoice.value.invoiceDate}`,
-    `Customer: ${invoice.value.customerName || ''}`,
-    '',
+    `🧾 *INVOICE*`,
+    `━━━━━━━━━━━━━━`,
+    `*From:* ${invoice.value.companyName || 'My Company'}`,
+    invoice.value.companyPhone ? `📞 ${invoice.value.companyPhone}` : '',
+    ``,
+    `📅 *Date:* ${invoice.value.invoiceDate}`,
+    invoice.value.invoiceNumber ? `🔢 *Invoice #:* ${invoice.value.invoiceNumber}` : '',
+    ``,
+    `👤 *To:* ${invoice.value.customerName || 'Customer'}`,
+    invoice.value.customerPhone ? `📱 ${invoice.value.customerPhone}` : '',
+    ``,
+    `📋 *ITEMS*`,
+    `━━━━━━━━━━━━━━`,
     ...invoice.value.lineItems.map(
-      (item, idx) =>
-        `${idx + 1}. ${item.description} - Qty: ${item.quantity}, Price: ₵${item.price}, Total: ₵${(item.quantity * item.price).toFixed(2)}`
-    ),
-    '',
-    `Subtotal: ₵${subtotal.value.toFixed(2)}`,
-    `VAT (${vatLabel.value}): ₵${vatAmount.value.toFixed(2)}`,
-    `*Total: ₵${total.value.toFixed(2)}*`
-  ]
+      (item, idx) => item.description && 
+        `${idx + 1}. *${item.description}*\n` +
+        `   • Qty: ${item.quantity}\n` +
+        `   • Price: ₵${formatCurrency(item.price)}\n` +
+        `   • Total: ₵${formatCurrency(item.quantity * item.price)}`
+    ).filter(Boolean), // Remove empty items
+    ``,
+    `💰 *SUMMARY*`,
+    `━━━━━━━━━━━━━━`,
+    `Subtotal: ₵${formatCurrency(subtotal.value)}`,
+    `VAT (${vatLabel.value}): ₵${formatCurrency(vatAmount.value)}`,
+    `*TOTAL: ₵${formatCurrency(total.value)}*`,
+    ``,
+    `Generated with Stratonea Invoice Maker`
+  ].filter(Boolean) // Remove empty lines
+
   const message = lines.join('\n')
 
-  // 2. Format WhatsApp link (no phone number, just message)
+  // 2. Format WhatsApp link
   const waUrl = `https://wa.me/?text=${encodeURIComponent(message)}`
 
-  // 3. Open WhatsApp (new tab/window)
+  // 3. Open WhatsApp
   window.open(waUrl, '_blank')
 }
+
+
+
+// ===== [New Feature] START =====
+/**
+ * Formats a number with commas for thousands and fixed 2 decimal places
+ * Examples:
+ * - 1000 -> "1,000.00"
+ * - 20000 -> "20,000.00"
+ * - 1234567.89 -> "1,234,567.89"
+ */
+ function formatCurrency(amount: number): string {
+  return amount.toLocaleString('en-GH', {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  })
+}
 // ===== [New Feature] END =====
+
+
 </script>

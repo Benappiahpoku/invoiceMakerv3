@@ -45,7 +45,7 @@
          <span class="font-bold">Invoice #: </span> {{ invoice.invoiceNumber || 'Number' }}
         </p>
         <p class="text-gray-600">
-          <span class="font-bold"> Date: </span> {{ invoice.invoiceDate || 'Date' }}
+          <span class="font-bold"> Date: </span> {{ formatDate(invoice.invoiceDate) || 'Date' }}
         </p>
       </div>
     </div>
@@ -89,7 +89,7 @@
               ₵{{ item.price?.toFixed(2) || '0.00' }}
             </td>
             <td class="text-right py-3 px-4">
-              ₵{{ ((item.quantity || 0) * (item.price || 0)).toFixed(2) }}
+              ₵{{ formatCurrency(subtotal) }}
             </td>
           </tr>
         </tbody>
@@ -115,7 +115,7 @@
           </div>
           <div class="flex justify-between">
             <span class="font-medium text-gray-700">Total:</span>
-            <span>₵{{ ((item.quantity || 0) * (item.price || 0)).toFixed(2) }}</span>
+            <span>₵{{ formatCurrency(total) }}</span>
           </div>
         </div>
       </div>
@@ -126,17 +126,17 @@
       <div class="w-full sm:w-64 space-y-3">
         <div class="flex justify-between">
           <span class="font-medium">Subtotal:</span>
-          <span>₵{{ subtotal.toFixed(2) }}</span>
+          <span>₵{{ formatCurrency(subtotal) }}</span>
         </div>
         <div class="flex justify-between">
           <span class="font-medium">
             VAT ({{ vatLabel }}):
           </span>
-          <span>₵{{ vatAmount.toFixed(2) }}</span>
+          <span>₵{{ formatCurrency(vatAmount)}}</span>
         </div>
         <div class="flex justify-between text-lg font-bold border-t border-gray-200 pt-3">
           <span>Total:</span>
-          <span>₵{{ total.toFixed(2) }}</span>
+          <span>₵{{ formatCurrency(total) }}</span>
         </div>
       </div>
     </div>
@@ -187,7 +187,7 @@ const vatLabel = computed(() => {
     case 'flat':
       return '4%'
     case 'standard':
-      return '21.5%'
+      return '21.9%'
     default:
       return '0%'
   }
@@ -198,7 +198,7 @@ const vatAmount = computed(() => {
     case 'flat':
       return subtotal.value * 0.04
     case 'standard':
-      return subtotal.value * 0.215
+      return subtotal.value * 0.219
     default:
       return 0
   }
@@ -206,4 +206,31 @@ const vatAmount = computed(() => {
 
 const total = computed(() => subtotal.value + vatAmount.value)
 // ===== [New Feature] END =====
+
+
+// ===== [New Feature] START =====
+/**
+ * Formats a number with commas for thousands and fixed 2 decimal places
+ * Examples:
+ * - 1000 -> "1,000.00"
+ * - 20000 -> "20,000.00"
+ * - 1234567.89 -> "1,234,567.89"
+ */
+ function formatCurrency(amount: number): string {
+  return amount.toLocaleString('en-GH', {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  })
+}
+// ===== [New Feature] END =====
+
+function formatDate(dateString: string): string {
+  try {
+    const [year, month, day] = dateString.split('-')
+    return `${day}-${month}-${year}`
+  } catch (error) {
+    // If parsing fails, return original string
+    return dateString
+  }
+}
 </script>
