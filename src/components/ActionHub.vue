@@ -8,10 +8,13 @@
           <span>Home</span>
         </router-link>
         
-        <router-link to="/new-invoice" class="flex items-center space-x-2 text-primary-600 hover:text-primary-700">
+        <button 
+          @click="handleNewInvoice" 
+          class="flex items-center space-x-2 text-primary-600 hover:text-primary-700"
+        >
           <font-awesome-icon icon="fa-solid fa-plus-circle" class="text-xl" />
           <span>New Invoice</span>
-        </router-link>
+        </button>
         
         <button @click="shareWhatsApp" class="flex items-center space-x-2 text-green-600 hover:text-green-700">
           <font-awesome-icon icon="fa-brands fa-whatsapp" class="text-xl" />
@@ -31,9 +34,12 @@
         <font-awesome-icon icon="fa-solid fa-home" class="text-2xl" />
       </router-link>
       
-      <router-link to="/new-invoice" class="text-primary-600 hover:text-primary-700">
+      <button 
+        @click="handleNewInvoice" 
+        class="text-primary-600 hover:text-primary-700"
+      >
         <font-awesome-icon icon="fa-solid fa-plus-circle" class="text-2xl" />
-      </router-link>
+      </button>
       
       <button @click="shareWhatsApp" class="text-green-600 hover:text-green-700">
         <font-awesome-icon icon="fa-brands fa-whatsapp" class="text-2xl" />
@@ -50,6 +56,26 @@
 // ===== File-Level Documentation =====
 // ActionHub.vue: Floating action bar for navigation and invoice actions.
 // Receives invoice data and logo as props. Emits events for parent to handle logic.
+// Added new invoice handling with page refresh functionality.
+import { useRouter } from 'vue-router'
+
+// ===== Constants & Config =====
+const router = useRouter()
+
+
+async function handleNewInvoice() {
+  try {
+    // First, navigate to /new-invoice
+    await router.push('/new-invoice')
+    
+    // Then refresh the page
+    window.location.reload()
+    
+    console.log('[ActionHub] Navigated to /new-invoice and refreshed page')
+  } catch (error) {
+    console.error('[ActionHub] Navigation error:', error)
+  }
+}
 
 // ===== [New Feature] START =====
 /**

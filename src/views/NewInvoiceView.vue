@@ -346,9 +346,7 @@
 import { ref, computed, onMounted, watch } from 'vue'
 import localforage from 'localforage'
 import InvoicePreview from '@/components/InvoicePreview.vue'
-// ===== [New Feature] START =====
 import ActionHub from '@/components/ActionHub.vue'
-// ===== [New Feature] END =====
 import html2pdf from 'html2pdf.js'
 
 
@@ -632,7 +630,27 @@ function handleSubmit() {
   }
 
   // 2. Configure html2pdf options for Ghana mobile users
-  const fileName = `Invoice-${invoice.value.invoiceNumber || 'Ghana'}.pdf`
+  const fileName = `Invoice-${
+    invoice.value.invoiceNumber 
+      ? `${invoice.value.invoiceNumber}${invoice.value.customerName ? '--' + invoice.value.customerName.trim() : ''}`
+      : invoice.value.customerName?.trim() || 'Customer'
+  }.pdf`
+
+
+// With both customer name and invoice number:
+// "Invoice-INV001--John Doe.pdf"
+
+// With only customer name:
+// "Invoice-John Doe.pdf"
+
+// With only invoice number:
+// "Invoice-Customer-INV001.pdf"
+
+// With neither:
+// "Invoice-Customer.pdf"
+
+
+
   const opt = {
     margin:       0.2, // Small margin for mobile
     filename:     fileName,
