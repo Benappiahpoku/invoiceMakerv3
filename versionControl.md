@@ -1,6 +1,6 @@
 # Version Control Tags
 
-git tag -a invoice-maker-v1.2 -m "Stable version 1.2"
+git tag -a invoice-maker-v1.3 -m "Stable version 1.3"
 
 ## Check Tags
 

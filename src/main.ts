@@ -4,12 +4,14 @@ import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 import App from './App.vue'
 import router from './router'
 import './style.css'
-// import '@fortawesome/fontawesome-free/css/all.css'
-
 import {FontAwesomeIcon} from './plugins/fontawesome.ts'
 import Toast   from './plugins/toast.ts'
 import { toastOptions } from './plugins/toast.ts'
 import 'vue-toastification/dist/index.css'
+import { inject } from "@vercel/analytics"
+
+inject();
+
 
 // Import base components
 import AppButton from './components/base/AppButton.vue'
