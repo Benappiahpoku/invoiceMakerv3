@@ -8,9 +8,10 @@ import {FontAwesomeIcon} from './plugins/fontawesome.ts'
 import Toast   from './plugins/toast.ts'
 import { toastOptions } from './plugins/toast.ts'
 import 'vue-toastification/dist/index.css'
+
+// Import Vercel Analytics for pageview/event tracking
 import { inject } from "@vercel/analytics"
 
-inject();
 
 
 // Import base components
@@ -41,6 +42,10 @@ app.component('font-awesome-icon', FontAwesomeIcon)
 app.use(pinia)
 app.use(router)
 app.use(Toast, toastOptions)
+
+
+// Initialize Vercel Analytics (tracks pageviews automatically)
+inject();
 
 // Mount the app
 app.mount('#app')

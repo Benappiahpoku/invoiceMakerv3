@@ -11,25 +11,13 @@
 <template>
   <!-- ===== [New Feature] START ===== -->
   <!-- Responsive container: mobile-first, desktop-friendly -->
-  <div
-    :id="previewId || ''"
-    class="bg-white rounded-lg shadow-lg p-4 sm:p-8 max-w-full mx-auto"
-  >
+  <div :id="previewId || ''" class="bg-white rounded-lg shadow-lg p-4 sm:p-8 max-w-full mx-auto">
     <!-- Invoice Header: Logo + Company Info -->
-    <div
-      class="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-8 gap-4"
-    >
+    <div class="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-8 gap-4">
       <div class="flex flex-col items-center sm:items-start">
         <!-- Company Logo (if present) -->
-        <div
-          class="w-24 h-24 bg-gray-100 rounded-lg mb-4 flex items-center justify-center overflow-hidden"
-        >
-          <img
-            v-if="companyLogo"
-            :src="companyLogo"
-            alt="Company Logo"
-            class="object-contain w-full h-full"
-          />
+        <div class="w-24 h-24 bg-gray-100 rounded-lg mb-4 flex items-center justify-center overflow-hidden">
+          <img v-if="companyLogo" :src="companyLogo" alt="Company Logo" class="object-contain w-full h-full" />
           <span v-else class="text-gray-400 text-xs text-center">No Logo</span>
         </div>
         <h2 class="text-2xl font-bold text-gray-900 text-center sm:text-left">
@@ -42,7 +30,7 @@
       <div class="text-center sm:text-right mt-4 sm:mt-0">
         <h1 class="text-4xl font-bold text-primary mb-2">INVOICE</h1>
         <p class="text-gray-600">
-         <span class="font-bold">Invoice #: </span> {{ invoice.invoiceNumber || 'Number' }}
+          <span class="font-bold">Invoice #: </span> {{ invoice.invoiceNumber || 'Number' }}
         </p>
         <p class="text-gray-600">
           <span class="font-bold"> Date: </span> {{ formatDate(invoice.invoiceDate) || 'Date' }}
@@ -67,18 +55,14 @@
       <table class="w-full hidden sm:table">
         <thead>
           <tr class="border-b-2 border-gray-200">
-            <th class="text-left py-3 px-4 font-bold">   Description</th>
+            <th class="text-left py-3 px-4 font-bold"> Description</th>
             <th class="text-center py-3 px-4 font-bold">Quantity</th>
             <th class="text-right py-3 px-4 font-bold">Price</th>
-            <th class="text-right py-3 px-4 font-bold" >Total</th>
+            <th class="text-right py-3 px-4 font-bold">Total</th>
           </tr>
         </thead>
         <tbody>
-          <tr
-            v-for="(item, index) in invoice.lineItems"
-            :key="index"
-            class="border-b border-gray-100"
-          >
+          <tr v-for="(item, index) in invoice.lineItems" :key="index" class="border-b border-gray-100">
             <td class="py-3 px-4">
               {{ item.description || 'Item description' }}
             </td>
@@ -86,21 +70,17 @@
               {{ item.quantity || 0 }}
             </td>
             <td class="text-right py-3 px-4">
-              ₵{{ item.price?.toFixed(2) || '0.00' }}
+              ₵{{ formatCurrency(item.price || 0) }}
             </td>
             <td class="text-right py-3 px-4">
-              ₵{{ formatCurrency(subtotal) }}
+              ₵{{ formatCurrency((item.quantity || 0) * (item.price || 0)) }}
             </td>
           </tr>
         </tbody>
       </table>
       <!-- Mobile Card List -->
       <div class="sm:hidden flex flex-col gap-4">
-        <div
-          v-for="(item, index) in invoice.lineItems"
-          :key="index"
-          class="bg-gray-50 rounded-lg p-4 flex flex-col"
-        >
+        <div v-for="(item, index) in invoice.lineItems" :key="index" class="bg-gray-50 rounded-lg p-4 flex flex-col">
           <div class="flex justify-between">
             <span class="font-medium text-gray-700 ">Description:</span>
             <span>{{ item.description || 'Item' }}</span>
@@ -111,11 +91,11 @@
           </div>
           <div class="flex justify-between">
             <span class="font-medium text-gray-700">Price:</span>
-            <span>₵{{ item.price?.toFixed(2) || '0.00' }}</span>
+            <span>₵{{ formatCurrency(item.price || 0) }}</span>
           </div>
           <div class="flex justify-between">
             <span class="font-medium text-gray-700">Total:</span>
-            <span>₵{{ formatCurrency(total) }}</span>
+            <span>₵{{ formatCurrency((item.quantity || 0) * (item.price || 0)) }}</span>
           </div>
         </div>
       </div>
@@ -172,11 +152,10 @@ const props = defineProps<{
   previewId?: string // For PDF targeting
 }>()
 
-// ===== [New Feature] START =====
-// Subtotal calculation
+// Update the subtotal calculation to handle potential undefined values
 const subtotal = computed(() =>
   props.invoice.lineItems.reduce(
-    (sum, item) => sum + (item.quantity || 0) * (item.price || 0),
+    (sum, item) => sum + (Number(item.quantity) || 0) * (Number(item.price) || 0),
     0
   )
 )
@@ -214,10 +193,15 @@ const total = computed(() => subtotal.value + vatAmount.value)
  * Examples:
  * - 1000 -> "1,000.00"
  * - 20000 -> "20,000.00"
- * - 1234567.89 -> "1,234,567.89"
+ * - 1234567.89 -> "1,234,567.89"  
  */
- function formatCurrency(amount: number): string {
-  return amount.toLocaleString('en-GH', {
+/**
+ * Formats a number with commas for thousands and fixed 2 decimal places
+ * Safely handles undefined/null values by defaulting to 0
+ */
+function formatCurrency(amount: number | undefined | null): string {
+  const safeAmount = Number(amount) || 0
+  return safeAmount.toLocaleString('en-GH', {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2
   })

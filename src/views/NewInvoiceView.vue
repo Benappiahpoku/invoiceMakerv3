@@ -651,13 +651,24 @@ function handleSubmit() {
 
 
 
-  const opt = {
-    margin:       0.2, // Small margin for mobile
-    filename:     fileName,
-    image:        { type: 'jpeg', quality: 0.98 },
-    html2canvas:  { scale: 2, useCORS: true },
-    jsPDF:        { unit: 'in', format: 'a4', orientation: 'portrait' }
-  }
+   const opt = {
+     margin: [0.5, 0.8, 0.5, 0.8], // [top, right, bottom, left] margins in inches
+     filename: fileName,
+     image: { type: 'jpeg', quality: 0.98 },
+     html2canvas: {
+       scale: 2,
+       useCORS: true,
+       letterRendering: true // Better text rendering
+     },
+     jsPDF: {
+       unit: 'in',
+       format: 'a4',
+       orientation: 'portrait',
+       putOnlyUsedFonts: true,
+       floatPrecision: 16 // Better text positioning
+     },
+     
+   }
 
   // 3. Generate and save PDF
   html2pdf()
