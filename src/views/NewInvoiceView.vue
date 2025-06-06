@@ -21,42 +21,29 @@
               <h2 class="text-2xl font-bold text-primary">Company Details</h2>
             </div>
             <div class="grid md:grid-cols-2 gap-6">
+
               <!-- Logo Upload & Preview -->
               <div class="space-y-2">
                 <label for="companyLogo" class="block text-sm font-medium text-gray-700">
                   Company Logo
                 </label>
                 <div
-                  class="w-32 h-32 border-2 border-dashed border-gray-300 rounded-lg flex flex-col items-center justify-center relative bg-gray-50"
-                >
+                  class="w-32 h-32 border-2 border-dashed border-gray-300 rounded-lg flex flex-col items-center justify-center relative bg-gray-50">
                   <!-- Logo Preview -->
-                  <img
-                    v-if="companyLogo"
-                    :src="companyLogo"
-                    alt="Company Logo"
-                    class="object-contain w-full h-full rounded-lg"
-                  />
+                  <img v-if="companyLogo" :src="companyLogo" alt="Company Logo"
+                    class="object-contain w-full h-full rounded-lg" />
                   <!-- Placeholder if no logo -->
                   <span v-else class="text-gray-400 text-xs text-center px-2"> Tap to upload </span>
                   <!-- Remove Logo Button -->
-                  <button
-                    v-if="companyLogo"
-                    type="button"
-                    @click.stop="removeLogo"
+                  <button v-if="companyLogo" type="button" @click.stop="removeLogo"
                     class="absolute top-1 right-1 bg-red-600 text-white rounded-full w-7 h-7 flex items-center justify-center shadow hover:bg-red-700 z-20"
-                    aria-label="Remove Logo"
-                  >
+                    aria-label="Remove Logo">
                     &times;
                   </button>
                   <!-- File input -->
-                  <input
-                    id="companyLogo"
-                    type="file"
-                    accept="image/png,image/jpeg,image/jpg"
-                    class="absolute inset-0 opacity-0 cursor-pointer z-10"
-                    @change="handleLogoUpload"
-                    aria-label="Upload company logo"
-                  />
+                  <input id="companyLogo" type="file" accept="image/png,image/jpeg,image/jpg"
+                    class="absolute inset-0 opacity-0 cursor-pointer z-10" @change="handleLogoUpload"
+                    aria-label="Upload company logo" />
                 </div>
                 <!-- Show error if file is too large or wrong type -->
                 <p v-if="logoError" class="text-xs text-red-600 mt-1">{{ logoError }}</p>
@@ -65,50 +52,26 @@
               <!-- Company Name & Phone -->
               <div class="space-y-4">
                 <div>
-                  <label for="companyName" class="block text-sm font-medium text-gray-700"
-                    >Company Name</label
-                  >
-                  <input
-                    type="text"
-                    id="companyName"
-                    v-model="invoice.companyName"
-                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary"
-                  />
+                  <label for="companyName" class="block text-sm font-medium text-gray-700">Company Name</label>
+                  <input type="text" id="companyName" v-model="invoice.companyName"
+                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary" />
                 </div>
                 <div>
-                  <label for="companyPhone" class="block text-sm font-medium text-gray-700"
-                    >Company Phone</label
-                  >
-                  <input
-                    type="tel"
-                    id="companyPhone"
-                    v-model="invoice.companyPhone"
-                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary"
-                  />
+                  <label for="companyPhone" class="block text-sm font-medium text-gray-700">Company Phone</label>
+                  <input type="tel" id="companyPhone" v-model="invoice.companyPhone"
+                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary" />
                 </div>
                 <!-- ===== [New Feature] START ===== -->
                 <!-- Save/Load/Clear Defaults Buttons and Feedback -->
                 <div class="flex gap-2 mt-2">
-                  <button
-                    type="button"
-                    class="text-blue-600 hover:text-blue-800"
-                    @click="loadDefaults"
-                  >
+                  <button type="button" class="text-blue-600 hover:text-blue-800" @click="loadDefaults">
                     📥&nbsp;Load Info
                   </button>
 
-                  <button
-                    type="button"
-                    class="text-green-600 hover:text-green-800"
-                    @click="saveDefaults"
-                  >
+                  <button type="button" class="text-green-600 hover:text-green-800" @click="saveDefaults">
                     💾&nbsp;Save Info
                   </button>
-                  <button
-                    type="button"
-                    class="text-red-600 hover:text-red-800"
-                    @click="clearDefaults"
-                  >
+                  <button type="button" class="text-red-600 hover:text-red-800" @click="clearDefaults">
                     🧹&nbsp;Clear Info
                   </button>
                 </div>
@@ -128,26 +91,14 @@
             <h2 class="text-2xl font-bold text-primary mb-6">Customer Details</h2>
             <div class="grid md:grid-cols-2 gap-6">
               <div>
-                <label for="customerName" class="block text-sm font-medium text-gray-700"
-                  >Customer Name</label
-                >
-                <input
-                  type="text"
-                  id="customerName"
-                  v-model="invoice.customerName"
-                  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary"
-                />
+                <label for="customerName" class="block text-sm font-medium text-gray-700">Customer Name</label>
+                <input type="text" id="customerName" v-model="invoice.customerName"
+                  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary" />
               </div>
               <div>
-                <label for="customerPhone" class="block text-sm font-medium text-gray-700"
-                  >Customer Phone</label
-                >
-                <input
-                  type="tel"
-                  id="customerPhone"
-                  v-model="invoice.customerPhone"
-                  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary"
-                />
+                <label for="customerPhone" class="block text-sm font-medium text-gray-700">Customer Phone</label>
+                <input type="tel" id="customerPhone" v-model="invoice.customerPhone"
+                  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary" />
               </div>
             </div>
           </section>
@@ -157,26 +108,14 @@
             <h2 class="text-2xl font-bold text-primary mb-6">Invoice Details</h2>
             <div class="grid md:grid-cols-2 gap-6">
               <div>
-                <label for="invoiceNumber" class="block text-sm font-medium text-gray-700"
-                  >Invoice Number</label
-                >
-                <input
-                  type="text"
-                  id="invoiceNumber"
-                  v-model="invoice.invoiceNumber"
-                  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary"
-                />
+                <label for="invoiceNumber" class="block text-sm font-medium text-gray-700">Invoice Number</label>
+                <input type="text" id="invoiceNumber" v-model="invoice.invoiceNumber"
+                  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary" />
               </div>
               <div>
-                <label for="invoiceDate" class="block text-sm font-medium text-gray-700"
-                  >Invoice Date</label
-                >
-                <input
-                  type="date"
-                  id="invoiceDate"
-                  v-model="invoice.invoiceDate"
-                  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary"
-                />
+                <label for="invoiceDate" class="block text-sm font-medium text-gray-700">Invoice Date</label>
+                <input type="date" id="invoiceDate" v-model="invoice.invoiceDate"
+                  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary" />
               </div>
             </div>
           </section>
@@ -188,9 +127,7 @@
             </div>
             <div class="space-y-4">
               <!-- Table header for desktop -->
-              <div
-                class="hidden md:grid grid-cols-12 gap-4 items-center font-medium text-gray-700 mb-2"
-              >
+              <div class="hidden md:grid grid-cols-12 gap-4 items-center font-medium text-gray-700 mb-2">
                 <div class="col-span-5">Description</div>
                 <div class="col-span-2">Quantity</div>
                 <div class="col-span-2">Price</div>
@@ -198,49 +135,24 @@
                 <div class="col-span-1"></div>
               </div>
               <!-- Line item rows -->
-              <div
-                v-for="(item, index) in invoice.lineItems"
-                :key="index"
-                :class="[
+              <div v-for="(item, index) in invoice.lineItems" :key="index" :class="[
                   'md:grid md:grid-cols-12 md:gap-4 md:items-center',
                   'flex flex-col space-y-4 md:space-y-0 p-4 mb-4 md:mb-0 bg-gray-50 md:bg-transparent rounded-lg md:rounded-none'
-                ]"
-              >
+                ]">
                 <div class="col-span-5">
-                  <label :for="'description-' + index" class="block md:sr-only text-gray-600 mb-1"
-                    >Description</label
-                  >
-                  <input
-                    type="text"
-                    :id="'description-' + index"
-                    v-model="item.description"
-                    placeholder="Description"
-                    class="block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary"
-                  />
+                  <label :for="'description-' + index" class="block md:sr-only text-gray-600 mb-1">Description</label>
+                  <input type="text" :id="'description-' + index" v-model="item.description" placeholder="Description"
+                    class="block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary" />
                 </div>
                 <div class="col-span-2">
-                  <label :for="'quantity-' + index" class="block md:sr-only text-gray-600 mb-1"
-                    >Quantity</label
-                  >
-                  <input
-                    type="number"
-                    :id="'quantity-' + index"
-                    v-model="item.quantity"
-                    placeholder="Qty"
-                    class="block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary"
-                  />
+                  <label :for="'quantity-' + index" class="block md:sr-only text-gray-600 mb-1">Quantity</label>
+                  <input type="number" :id="'quantity-' + index" v-model="item.quantity" placeholder="Qty"
+                    class="block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary" />
                 </div>
                 <div class="col-span-2">
-                  <label :for="'price-' + index" class="block md:sr-only text-gray-600 mb-1"
-                    >Price</label
-                  >
-                  <input
-                    type="number"
-                    :id="'price-' + index"
-                    v-model="item.price"
-                    placeholder="Price"
-                    class="block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary"
-                  />
+                  <label :for="'price-' + index" class="block md:sr-only text-gray-600 mb-1">Price</label>
+                  <input type="number" :id="'price-' + index" v-model="item.price" placeholder="Price"
+                    class="block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary" />
                 </div>
                 <div class="col-span-2">
                   <label class="block md:sr-only text-gray-600 mb-1">Total</label>
@@ -251,19 +163,12 @@
               </div>
               <!-- Add/Remove Item Buttons -->
               <div class="flex flex-col md:flex-row justify-end gap-4 mt-4">
-                <button
-                  type="button"
-                  @click="addLineItem"
-                  class="w-full md:w-auto bg-primary hover:bg-primary-dark text-white px-4 py-3 rounded-lg transition duration-300 text-sm md:text-base"
-                >
+                <button type="button" @click="addLineItem"
+                  class="w-full md:w-auto bg-primary hover:bg-primary-dark text-white px-4 py-3 rounded-lg transition duration-300 text-sm md:text-base">
                   Add Item
                 </button>
-                <button
-                  type="button"
-                  @click="removeLastItem"
-                  :disabled="invoice.lineItems.length <= 1"
-                  class="w-full md:w-auto bg-primary hover:bg-primary-dark text-white px-4 py-3 rounded-lg transition duration-300 disabled:opacity-50 disabled:cursor-not-allowed text-sm md:text-base"
-                >
+                <button type="button" @click="removeLastItem" :disabled="invoice.lineItems.length <= 1"
+                  class="w-full md:w-auto bg-primary hover:bg-primary-dark text-white px-4 py-3 rounded-lg transition duration-300 disabled:opacity-50 disabled:cursor-not-allowed text-sm md:text-base">
                   Remove Item
                 </button>
               </div>
@@ -272,15 +177,9 @@
 
           <!-- VAT Selection Section -->
           <section>
-            <label for="vatType" class="block text-sm font-medium text-gray-700 mb-2"
-              >VAT Type</label
-            >
-            <select
-              id="vatType"
-              v-model="invoice.vatType"
-              @change="persistVatType"
-              class="block w-full max-w-xs rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary"
-            >
+            <label for="vatType" class="block text-sm font-medium text-gray-700 mb-2">VAT Type</label>
+            <select id="vatType" v-model="invoice.vatType" @change="persistVatType"
+              class="block w-full max-w-xs rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary">
               <option value="none">None (0%)</option>
               <option value="flat">Flat Rate (4%)</option>
               <option value="standard">Standard Rate (21.9%)</option>
@@ -293,7 +192,7 @@
               <div class="w-64 space-y-3">
                 <div class="flex justify-between">
                   <span class="font-medium">Subtotal:</span>
-                  <span>₵{{ formatCurrency(subtotal)  }}</span>
+                  <span>₵{{ formatCurrency(subtotal) }}</span>
                 </div>
                 <div class="flex justify-between">
                   <span class="font-medium">VAT ({{ vatLabel }}):</span>
@@ -318,15 +217,15 @@
         </div>
       </section>
 
- <!-- ===== [New Feature] START ===== -->
+      <section>
+        <AppSwitcher type="invoice" />
+      </section>
+
+      <!-- ===== [New Feature] START ===== -->
       <!-- ActionHub: Floating action bar for PDF/WhatsApp sharing -->
 
-      <ActionHub
-        :invoice="invoice"
-        :companyLogo="companyLogo"
-        @download-pdf="handleDownloadPDF"
-        @share-whatsapp="handleShareWhatsApp"
-      />
+      <ActionHub :invoice="invoice" :companyLogo="companyLogo" @download-pdf="handleDownloadPDF"
+        @share-whatsapp="handleShareWhatsApp" />
       <!-- ===== [New Feature] END ===== -->
 
     </div>
@@ -348,6 +247,7 @@ import localforage from 'localforage'
 import InvoicePreview from '@/components/InvoicePreview.vue'
 import ActionHub from '@/components/ActionHub.vue'
 import html2pdf from 'html2pdf.js'
+import AppSwitcher from '../components/AppSwitcher.vue'
 
 
 // ===== Types & Interfaces =====
