@@ -218,6 +218,16 @@
       </section>
 
       <section>
+        <Divider />
+        <section>
+<ToolKitPreview />
+        </section>
+      </section>
+      <section>
+        <Divider />
+      </section>
+
+      <section>
         <AppSwitcher type="invoice" />
       </section>
 
@@ -248,6 +258,8 @@ import InvoicePreview from '@/components/InvoicePreview.vue'
 import ActionHub from '@/components/ActionHub.vue'
 import html2pdf from 'html2pdf.js'
 import AppSwitcher from '../components/AppSwitcher.vue'
+import Divider from '@/components/base/Divider.vue'
+import ToolKitPreview from '@/components/ToolKitPreview.vue'
 
 
 // ===== Types & Interfaces =====

@@ -60,8 +60,8 @@ const alternateLabel = computed(() =>
 )
 
 // Update these with your live Vercel URLs
-const invoiceUrl = 'https://invoice.teklumen.com'
-const receiptUrl = 'https://receipt.teklumen.com'
+const invoiceUrl = 'https://invoicemaker-eosin.vercel.app/'
+const receiptUrl = 'https://receiptmaker-ten.vercel.app/'
 
 const alternateLink = computed(() =>
     props.type === 'invoice' ? receiptUrl : invoiceUrl
