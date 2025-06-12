@@ -6,6 +6,8 @@
   - Uses only Tailwind utility classes for styling.
   - Prepares for PDF/WhatsApp export (PDF always uses desktop layout).
   - No external dependencies required for preview.
+ - Now supports "Custom" VAT type: receives customVatPercent as a prop and displays/calculates accordingly.
+ - Now supports dynamic currency symbol everywhere (uses currency prop).
 -->
 
 <template>
@@ -70,10 +72,10 @@
               {{ item.quantity || 0 }}
             </td>
             <td class="text-right py-3 px-4">
-              ₵{{ formatCurrency(item.price || 0) }}
+              {{ currencySymbol+ " "}}{{ formatCurrency(item.price || 0) }}
             </td>
             <td class="text-right py-3 px-4">
-              ₵{{ formatCurrency((item.quantity || 0) * (item.price || 0)) }}
+              {{ currencySymbol + " " }}{{ formatCurrency((item.quantity || 0) * (item.price || 0)) }}
             </td>
           </tr>
         </tbody>
@@ -91,11 +93,11 @@
           </div>
           <div class="flex justify-between">
             <span class="font-medium text-gray-700">Price:</span>
-            <span>₵{{ formatCurrency(item.price || 0) }}</span>
+            <span>{{ currencySymbol + " " }}{{ formatCurrency(item.price || 0) }}</span>
           </div>
           <div class="flex justify-between">
             <span class="font-medium text-gray-700">Total:</span>
-            <span>₵{{ formatCurrency((item.quantity || 0) * (item.price || 0)) }}</span>
+            <span>{{ currencySymbol + " " }}{{ formatCurrency((item.quantity || 0) * (item.price || 0)) }}</span>
           </div>
         </div>
       </div>
@@ -106,17 +108,17 @@
       <div class="w-full sm:w-64 space-y-3">
         <div class="flex justify-between">
           <span class="font-medium">Subtotal:</span>
-          <span>₵{{ formatCurrency(subtotal) }}</span>
+          <span>{{ currencySymbol + " " }}{{ formatCurrency(subtotal) }}</span>
         </div>
         <div class="flex justify-between">
           <span class="font-medium">
-            VAT ({{ vatLabel }}):
+            Tax ({{ vatLabel }}):
           </span>
-          <span>₵{{ formatCurrency(vatAmount)}}</span>
+          <span>{{ currencySymbol + " " }}{{ formatCurrency(vatAmount) }}</span>
         </div>
         <div class="flex justify-between text-lg font-bold border-t border-gray-200 pt-3">
           <span>Total:</span>
-          <span>₵{{ formatCurrency(total) }}</span>
+          <span>{{ currencySymbol + " " }}{{ formatCurrency(total) }}</span>
         </div>
       </div>
     </div>
@@ -129,11 +131,21 @@
 // InvoicePreview.vue: Responsive, printable invoice preview for mobile and desktop.
 // Accepts all invoice data and logo as props. Handles missing data gracefully.
 // Uses only Tailwind utility classes. Prepares for PDF/WhatsApp export.
+// <!-- ===== [New Feature] START ===== -->
+// Now supports "Custom" VAT type: receives customVatPercent as a prop and displays/calculates accordingly.
+// <!-- ===== [New Feature] END ===== -->
 
 // ===== Imports & Props =====
 import { computed } from 'vue'
 
-const props = defineProps<{
+/**
+ * Props for InvoicePreview
+ * - invoice: Invoice data object (required)
+ * - companyLogo: base64 string or null (optional)
+ * - previewId: string for targeting PDF export (optional)
+ * - customVatPercent: number (optional, only used if vatType is 'custom')
+ */
+const props = withDefaults(defineProps<{
   invoice: {
     companyName: string
     companyPhone: string
@@ -146,13 +158,46 @@ const props = defineProps<{
       quantity: number
       price: number
     }[]
-    vatType?: 'none' | 'flat' | 'standard'
+    vatType?: 'none' | 'flat' | 'standard' | 'custom'
   }
   companyLogo?: string | null
   previewId?: string // For PDF targeting
-}>()
+  customVatPercent?: number | string // Accept both for safety
+  currency: string
+}>(), {
+  customVatPercent: 0 // Default to 0 if not provided
+})
 
-// Update the subtotal calculation to handle potential undefined values
+/**
+  * Computes the currency symbol for the given currency code.
+ * Used everywhere subtotal, VAT, and total are shown.
+ */
+const currencySymbol = computed(() => {
+  // Map of currency codes to symbols
+  const symbols: Record<string, string> = {
+    GHS: '₵',
+    NGN: '₦',
+    KES: 'KSh',
+    ZAR: 'R',
+    XOF: 'CFA ',
+    INR: '₹',
+    USD: '$',
+    EUR: '€',
+    GBP: '£',
+    CAD: 'CA$',
+    AUD: 'A$'
+  }
+  // Default to code if not found
+  return symbols[props.currency] || props.currency + ' '
+})
+
+
+// ===== Totals Calculation =====
+
+/**
+ * Calculates subtotal of all line items.
+ * Handles undefined/null values gracefully.
+ */
 const subtotal = computed(() =>
   props.invoice.lineItems.reduce(
     (sum, item) => sum + (Number(item.quantity) || 0) * (Number(item.price) || 0),
@@ -160,41 +205,52 @@ const subtotal = computed(() =>
   )
 )
 
-// VAT label and amount based on invoice.vatType
+/**
+ * Returns the VAT label for display based on selection.
+ * Shows custom percent if selected.
+ */
 const vatLabel = computed(() => {
   switch (props.invoice.vatType) {
     case 'flat':
       return '4%'
     case 'standard':
       return '21.9%'
+    case 'custom':
+      // Always show as number, fallback to 0
+      return `${Number(props.customVatPercent) || 0}%`
     default:
       return '0%'
   }
 })
 
+/**
+ * Calculates VAT amount based on selected VAT type.
+ * - none: 0%
+ * - flat: 4%
+ * - standard: 21.9%
+ * - custom: user-defined percent (from prop)
+ */
 const vatAmount = computed(() => {
   switch (props.invoice.vatType) {
     case 'flat':
       return subtotal.value * 0.04
     case 'standard':
       return subtotal.value * 0.219
+    case 'custom':
+      // Clamp to 0-100 for safety, always use Number()
+      const percent = Math.max(0, Math.min(Number(props.customVatPercent) || 0, 100))
+      return subtotal.value * (percent / 100)
     default:
       return 0
   }
 })
 
+/**
+ * Calculates total (subtotal + VAT).
+ */
 const total = computed(() => subtotal.value + vatAmount.value)
-// ===== [New Feature] END =====
-
 
 // ===== [New Feature] START =====
-/**
- * Formats a number with commas for thousands and fixed 2 decimal places
- * Examples:
- * - 1000 -> "1,000.00"
- * - 20000 -> "20,000.00"
- * - 1234567.89 -> "1,234,567.89"  
- */
 /**
  * Formats a number with commas for thousands and fixed 2 decimal places
  * Safely handles undefined/null values by defaulting to 0
@@ -208,6 +264,10 @@ function formatCurrency(amount: number | undefined | null): string {
 }
 // ===== [New Feature] END =====
 
+/**
+ * Formats a date string (YYYY-MM-DD) to DD-MM-YYYY for Ghanaian users.
+ * Returns original string if parsing fails.
+ */
 function formatDate(dateString: string): string {
   try {
     const [year, month, day] = dateString.split('-')

@@ -5,7 +5,9 @@
   - Follows Stratonea coding/documentation standards.
   - Now includes VAT mechanism with selectable VAT type and dynamic calculation.
   - Now includes Save/Load/Clear Defaults for company info.
-   - Now connects ActionHub for PDF/WhatsApp sharing.
+  - Now connects ActionHub for PDF/WhatsApp sharing.
+  - Now supports "Custom" VAT type: user can enter their own VAT percentage, which is used in calculations and persisted.
+  - Now uses selected currency symbol everywhere subtotal, VAT, and total are shown.
 -->
 
 <template>
@@ -136,9 +138,9 @@
               </div>
               <!-- Line item rows -->
               <div v-for="(item, index) in invoice.lineItems" :key="index" :class="[
-                  'md:grid md:grid-cols-12 md:gap-4 md:items-center',
-                  'flex flex-col space-y-4 md:space-y-0 p-4 mb-4 md:mb-0 bg-gray-50 md:bg-transparent rounded-lg md:rounded-none'
-                ]">
+                'md:grid md:grid-cols-12 md:gap-4 md:items-center',
+                'flex flex-col space-y-4 md:space-y-0 p-4 mb-4 md:mb-0 bg-gray-50 md:bg-transparent rounded-lg md:rounded-none'
+              ]">
                 <div class="col-span-5">
                   <label :for="'description-' + index" class="block md:sr-only text-gray-600 mb-1">Description</label>
                   <input type="text" :id="'description-' + index" v-model="item.description" placeholder="Description"
@@ -157,7 +159,7 @@
                 <div class="col-span-2">
                   <label class="block md:sr-only text-gray-600 mb-1">Total</label>
                   <p class="text-right font-medium pr-12">
-                    ₵{{ formatCurrency(item.quantity * item.price) }}
+                    {{ currencySymbol + " "}}{{ formatCurrency(item.quantity * item.price) }}
                   </p>
                 </div>
               </div>
@@ -175,16 +177,38 @@
             </div>
           </section>
 
-          <!-- VAT Selection Section -->
+          <!-- Currency Selector Section -->
           <section>
-            <label for="vatType" class="block text-sm font-medium text-gray-700 mb-2">VAT Type</label>
+            <!--
+              Pass modelValue and @update:modelValue for v-model compatibility.
+              This ensures the component works with TypeScript strict prop checks.
+            -->
+            <CurrencySelector :modelValue="invoice.currency" @update:modelValue="val => invoice.currency = val" />
+          </section>
+
+          <!-- VAT Selection Section with Custom Option -->
+          <section>
+            <label for="vatType" class="block text-sm font-medium text-gray-700 mb-2">Choose Tax Type</label>
             <select id="vatType" v-model="invoice.vatType" @change="persistVatType"
               class="block w-full max-w-xs rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary">
               <option value="none">None (0%)</option>
               <option value="flat">Flat Rate (4%)</option>
               <option value="standard">Standard Rate (21.9%)</option>
+              <option value="custom">Custom Tax Rate (%)</option>
             </select>
+            <!-- Show custom VAT input if selected -->
+            <div v-if="invoice.vatType === 'custom'" class="mt-3 flex items-center gap-2">
+              <label for="customVat" class="text-sm text-gray-700">Custom Tax:</label>
+              <input id="customVat" type="number" min="0" max="100" step="0.01" v-model.number="customVatPercent"
+                @input="persistCustomVat"
+                class="w-24 rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary"
+                aria-label="Custom VAT percentage" />
+              <span class="text-gray-700">%</span>
+              <span v-if="customVatError" class="text-xs text-red-600 ml-2">{{ customVatError }}</span>
+            </div>
           </section>
+
+
 
           <!-- Totals Section -->
           <section class="border-t pt-6">
@@ -192,15 +216,15 @@
               <div class="w-64 space-y-3">
                 <div class="flex justify-between">
                   <span class="font-medium">Subtotal:</span>
-                  <span>₵{{ formatCurrency(subtotal) }}</span>
+                  <span>{{ currencySymbol + " " }}{{ formatCurrency(subtotal) }}</span>
                 </div>
                 <div class="flex justify-between">
-                  <span class="font-medium">VAT ({{ vatLabel }}):</span>
-                  <span>₵{{ formatCurrency(vatAmount) }}</span>
+                  <span class="font-medium">Tax ({{ vatLabel }}):</span>
+                  <span>{{ currencySymbol + " " }}{{ formatCurrency(vatAmount) }}</span>
                 </div>
                 <div class="flex justify-between text-lg font-bold">
                   <span>Total:</span>
-                  <span>₵{{ formatCurrency(total) }}</span>
+                  <span>{{ currencySymbol + " " }}{{ formatCurrency(total) }}</span>
                 </div>
               </div>
             </div>
@@ -213,14 +237,15 @@
         <h2 class="text-3xl font-bold text-center mb-12">Invoice Preview</h2>
         <div class="max-w-5xl mx-auto" id="invoice-preview-pdf">
           <!-- Pass logo as prop to preview if needed -->
-          <InvoicePreview :invoice="invoice" :companyLogo="companyLogo" />
+          <InvoicePreview :invoice="invoice" :companyLogo="companyLogo"
+            :customVatPercent="Number(customVatPercent) || 0" :currency="invoice.currency" />
         </div>
       </section>
 
       <section>
         <Divider />
         <section>
-<ToolKitPreview />
+          <ToolKitPreview />
         </section>
       </section>
       <section>
@@ -250,6 +275,9 @@
 // - All logic is self-contained for learning and clarity.
 // - Now includes VAT mechanism with selectable VAT type and dynamic calculation.
 // - Now connects ActionHub for PDF/WhatsApp sharing.
+// - <!-- ===== [New Feature] START ===== -->
+// - Now supports "Custom" VAT type: user can enter their own VAT percentage, which is used in calculations and persisted.
+// - <!-- ===== [New Feature] END ===== -->
 
 // ===== Imports =====
 import { ref, computed, onMounted, watch } from 'vue'
@@ -260,14 +288,15 @@ import html2pdf from 'html2pdf.js'
 import AppSwitcher from '../components/AppSwitcher.vue'
 import Divider from '@/components/base/Divider.vue'
 import ToolKitPreview from '@/components/ToolKitPreview.vue'
-
+import CurrencySelector from '@/components/CurrencySelector.vue'
 
 // ===== Types & Interfaces =====
 
 /**
  * Supported VAT types for Ghanaian businesses.
+ * Now includes 'custom' for user-defined VAT.
  */
-type VatType = 'none' | 'flat' | 'standard'
+type VatType = 'none' | 'flat' | 'standard' | 'custom'
 
 interface LineItem {
   description: string
@@ -283,7 +312,8 @@ interface Invoice {
   invoiceNumber: string
   invoiceDate: string
   lineItems: LineItem[]
-  vatType: VatType // NEW: VAT type selection
+  vatType: VatType // VAT type selection, now includes 'custom'
+  currency: string
 }
 
 // ===== Reactive State =====
@@ -297,7 +327,8 @@ const invoice = ref<Invoice>({
   invoiceNumber: '',
   invoiceDate: new Date().toISOString().split('T')[0],
   lineItems: [{ description: '', quantity: 1, price: 0 }],
-  vatType: 'none' // Default VAT type is 'none'
+  vatType: 'none' ,// Default VAT type is 'none',
+  currency: 'GHS',
 })
 
 // Holds the base64 logo string (or null)
@@ -310,6 +341,8 @@ const logoError = ref<string | null>(null)
 // Feedback state for Save/Load/Clear Defaults
 const defaultSavedMessage = ref<string | null>(null)
 const defaultErrorMessage = ref<string | null>(null)
+
+
 
 /**
  * Saves current company info as defaults in localforage.
@@ -360,6 +393,48 @@ async function clearDefaults() {
 }
 // ===== [Save Defaults Feature] END =====
 
+// ===== [New Feature] START =====
+// Custom VAT percentage state and validation
+const customVatPercent = ref<number>(0)
+const customVatError = ref<string | null>(null)
+
+/**
+ * Persists custom VAT percent to localForage and validates input.
+ * Only allows 0-100%.
+ */
+async function persistCustomVat() {
+  if (customVatPercent.value < 0 || customVatPercent.value > 100) {
+    customVatError.value = 'Enter a value between 0 and 100.'
+    return
+  }
+  customVatError.value = null
+  await localforage.setItem('customVatPercent', customVatPercent.value)
+}
+
+// ===== [New Feature] START =====
+/**
+ * Returns the currency symbol for the selected currency code.
+ * Used everywhere subtotal, VAT, and total are shown.
+ */
+const currencySymbol = computed(() => {
+  // Map of currency codes to symbols
+  const symbols: Record<string, string> = {
+    GHS: '₵',
+    NGN: '₦',
+    KES: 'KSh',
+    ZAR: 'R',
+    XOF: 'CFA ',
+    INR: '₹',
+    USD: '$',
+    EUR: '€',
+    GBP: '£',
+    CAD: 'CA$',
+    AUD: 'A$'
+  }
+  // Default to code if not found
+  return symbols[invoice.value.currency] || invoice.value.currency + ' '
+})
+
 // ===== Helper Functions =====
 
 /**
@@ -398,7 +473,7 @@ async function handleLogoUpload(event: Event) {
 }
 
 /**
- * Loads logo and VAT type from localForage on mount.
+ * Loads logo, VAT type, and custom VAT percent from localForage on mount.
  * If found, sets preview and VAT selection.
  */
 onMounted(async () => {
@@ -411,6 +486,15 @@ onMounted(async () => {
   if (storedVatType) {
     invoice.value.vatType = storedVatType
   }
+  // ===== [New Feature] START =====
+  // Restore custom VAT percent if previously saved
+  const storedCustomVat = await localforage.getItem<number>('customVatPercent')
+  if (typeof storedCustomVat === 'number') {
+    customVatPercent.value = storedCustomVat
+  } else {
+    customVatPercent.value = 0
+  }
+  // ===== [New Feature] END =====
 
   // ===== [Save Defaults Feature] START =====
   // Load company info defaults if present
@@ -436,9 +520,15 @@ async function removeLogo() {
 
 /**
  * Persists VAT type selection in localForage.
+ * If switching to custom, also persist the custom percent.
  */
 async function persistVatType() {
   await localforage.setItem('vatType', invoice.value.vatType)
+  // ===== [New Feature] START =====
+  if (invoice.value.vatType === 'custom') {
+    await persistCustomVat()
+  }
+  // ===== [New Feature] END =====
 }
 
 // ===== Line Items Logic =====
@@ -470,6 +560,7 @@ const subtotal = computed(() =>
 
 /**
  * Returns the VAT label for display based on selection.
+ * Shows custom percent if selected.
  */
 const vatLabel = computed(() => {
   switch (invoice.value.vatType) {
@@ -477,6 +568,10 @@ const vatLabel = computed(() => {
       return '4%'
     case 'standard':
       return '21.9%'
+    // ===== [New Feature] START =====
+    case 'custom':
+      return `${customVatPercent.value || 0}%`
+    // ===== [New Feature] END =====
     default:
       return '0%'
   }
@@ -487,6 +582,7 @@ const vatLabel = computed(() => {
  * - none: 0%
  * - flat: 4%
  * - standard: 21.9%
+ * - custom: user-defined percent
  */
 const vatAmount = computed(() => {
   switch (invoice.value.vatType) {
@@ -494,6 +590,12 @@ const vatAmount = computed(() => {
       return subtotal.value * 0.04
     case 'standard':
       return subtotal.value * 0.219
+    // ===== [New Feature] START =====
+    case 'custom':
+      // Clamp to 0-100 for safety
+      const percent = Math.max(0, Math.min(customVatPercent.value, 100))
+      return subtotal.value * (percent / 100)
+    // ===== [New Feature] END =====
     default:
       return 0
   }
@@ -513,8 +615,27 @@ watch(
   () => invoice.value.vatType,
   async (newType) => {
     await localforage.setItem('vatType', newType)
+    // ===== [New Feature] START =====
+    if (newType === 'custom') {
+      await persistCustomVat()
+    }
+    // ===== [New Feature] END =====
   }
 )
+
+// ===== [New Feature] START =====
+/**
+ * Watch customVatPercent and persist when changed, only if custom VAT is selected.
+ */
+watch(
+  customVatPercent,
+  async () => {
+    if (invoice.value.vatType === 'custom') {
+      await persistCustomVat()
+    }
+  }
+)
+// ===== [New Feature] END =====
 
 // ===== Form Submission (stub) =====
 
@@ -533,7 +654,7 @@ function handleSubmit() {
  * Uses html2pdf.js to generate and download a PDF of the invoice preview.
  * Ghana-ready: simple, mobile-first, and works offline.
  */
- function handleDownloadPDF() {
+function handleDownloadPDF() {
   // 1. Find the preview DOM node
   const previewEl = document.getElementById('invoice-preview-pdf')
   if (!previewEl) {
@@ -542,45 +663,29 @@ function handleSubmit() {
   }
 
   // 2. Configure html2pdf options for Ghana mobile users
-  const fileName = `Invoice-${
-    invoice.value.invoiceNumber 
+  const fileName = `Invoice-${invoice.value.invoiceNumber
       ? `${invoice.value.invoiceNumber}${invoice.value.customerName ? '--' + invoice.value.customerName.trim() : ''}`
       : invoice.value.customerName?.trim() || 'Customer'
-  }.pdf`
+    }.pdf`
 
+  const opt = {
+    margin: [0.5, 0.8, 0.5, 0.8], // [top, right, bottom, left] margins in inches
+    filename: fileName,
+    image: { type: 'jpeg', quality: 0.98 },
+    html2canvas: {
+      scale: 2,
+      useCORS: true,
+      letterRendering: true // Better text rendering
+    },
+    jsPDF: {
+      unit: 'in',
+      format: 'a4',
+      orientation: 'portrait',
+      putOnlyUsedFonts: true,
+      floatPrecision: 16 // Better text positioning
+    },
 
-// With both customer name and invoice number:
-// "Invoice-INV001--John Doe.pdf"
-
-// With only customer name:
-// "Invoice-John Doe.pdf"
-
-// With only invoice number:
-// "Invoice-Customer-INV001.pdf"
-
-// With neither:
-// "Invoice-Customer.pdf"
-
-
-
-   const opt = {
-     margin: [0.5, 0.8, 0.5, 0.8], // [top, right, bottom, left] margins in inches
-     filename: fileName,
-     image: { type: 'jpeg', quality: 0.98 },
-     html2canvas: {
-       scale: 2,
-       useCORS: true,
-       letterRendering: true // Better text rendering
-     },
-     jsPDF: {
-       unit: 'in',
-       format: 'a4',
-       orientation: 'portrait',
-       putOnlyUsedFonts: true,
-       floatPrecision: 16 // Better text positioning
-     },
-     
-   }
+  }
 
   // 3. Generate and save PDF
   html2pdf()
@@ -597,7 +702,6 @@ function handleSubmit() {
  * Generates a WhatsApp message link with invoice summary and opens it.
  * Ghana-ready: uses simple text, no attachments (for bandwidth).
  */
-// ===== [Update] WhatsApp Share Formatting =====
 function handleShareWhatsApp() {
   // 1. Build invoice summary message with improved formatting
   const lines = [
@@ -615,7 +719,7 @@ function handleShareWhatsApp() {
     `📋 *ITEMS*`,
     `━━━━━━━━━━━━━━`,
     ...invoice.value.lineItems.map(
-      (item, idx) => item.description && 
+      (item, idx) => item.description &&
         `${idx + 1}. *${item.description}*\n` +
         `   • Qty: ${item.quantity}\n` +
         `   • Price: ₵${formatCurrency(item.price)}\n` +
@@ -640,8 +744,6 @@ function handleShareWhatsApp() {
   window.open(waUrl, '_blank')
 }
 
-
-
 // ===== [New Feature] START =====
 /**
  * Formats a number with commas for thousands and fixed 2 decimal places
@@ -650,13 +752,12 @@ function handleShareWhatsApp() {
  * - 20000 -> "20,000.00"
  * - 1234567.89 -> "1,234,567.89"
  */
- function formatCurrency(amount: number): string {
+function formatCurrency(amount: number): string {
   return amount.toLocaleString('en-GH', {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2
   })
 }
 // ===== [New Feature] END =====
-
 
 </script>
