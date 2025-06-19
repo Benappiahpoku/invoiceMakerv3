@@ -65,6 +65,7 @@ const router = useRouter()
 
 async function handleNewInvoice() {
   try {
+    emit('reset-invoice-counter')
     // First, navigate to /new-invoice
     await router.push('/new-invoice')
     
@@ -97,6 +98,7 @@ withDefaults(
 const emit = defineEmits<{
   (e: 'download-pdf'): void
   (e: 'share-whatsapp'): void
+  (e: 'reset-invoice-counter'): void
 }>()
 // ===== [New Feature] END =====
 

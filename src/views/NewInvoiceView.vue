@@ -244,10 +244,18 @@
 
       <section>
         <Divider />
-        <section>
-          <ToolKitPreview />
-        </section>
       </section>
+
+      <InvoiceCounter />
+      <section>
+        <Divider />
+      </section>
+
+
+      <section>
+        <ToolKitPreview />
+      </section>
+
       <section>
         <Divider />
       </section>
@@ -260,8 +268,8 @@
       <!-- ActionHub: Floating action bar for PDF/WhatsApp sharing -->
 
       <ActionHub :invoice="invoice" :companyLogo="companyLogo" @download-pdf="handleDownloadPDF"
-        @share-whatsapp="handleShareWhatsApp" />
-      <!-- ===== [New Feature] END ===== -->
+        @share-whatsapp="handleShareWhatsApp" 
+      @reset-invoice-counter="resetInvoiceCounted" />
 
     </div>
   </div>
@@ -289,6 +297,10 @@ import AppSwitcher from '../components/AppSwitcher.vue'
 import Divider from '@/components/base/Divider.vue'
 import ToolKitPreview from '@/components/ToolKitPreview.vue'
 import CurrencySelector from '@/components/CurrencySelector.vue'
+import InvoiceCounter from '@/components/InvoiceCounter.vue'
+import { useInvoiceCounter } from '@/composables/useInvoiceCounter.ts'
+
+const { incrementInvoiceCount} = useInvoiceCounter()
 
 // ===== Types & Interfaces =====
 
@@ -343,7 +355,12 @@ const defaultSavedMessage = ref<string | null>(null)
 const defaultErrorMessage = ref<string | null>(null)
 
 
-
+// ===== Invoice Count State =====
+/**
+ * Tracks if the current invoice has already been counted for analytics.
+ * This prevents double-counting when both download and share are triggered.
+ */
+const invoiceCounted = ref(false)
 /**
  * Saves current company info as defaults in localforage.
  * Only saves companyName and companyPhone.
@@ -695,6 +712,16 @@ function handleDownloadPDF() {
     .catch(() => {
       alert('Could not generate PDF. Please try again or check your internet connection.')
     })
+
+  
+
+  if (!invoiceCounted.value) {
+    incrementInvoiceCount()
+    invoiceCounted.value = true
+    console.log('[Invoice] Counter incremented!')
+  } else {
+    console.log('[Invoice] Counter NOT incremented (already counted for this invoice)')
+  }
 }
 
 /**
@@ -742,6 +769,16 @@ function handleShareWhatsApp() {
 
   // 3. Open WhatsApp
   window.open(waUrl, '_blank')
+
+
+
+  if (!invoiceCounted.value) {
+    incrementInvoiceCount()
+    invoiceCounted.value = true
+    console.log('[Invoice] Counter incremented!')
+  } else {
+    console.log('[Invoice] Counter NOT incremented (already counted for this invoice)')
+  }
 }
 
 // ===== [New Feature] START =====
@@ -758,6 +795,14 @@ function formatCurrency(amount: number): string {
     maximumFractionDigits: 2
   })
 }
-// ===== [New Feature] END =====
+
+
+/**
+ * Resets the invoice counted flag when starting a new invoice.
+ */
+function resetInvoiceCounted() {
+  invoiceCounted.value = false
+}
+
 
 </script>
