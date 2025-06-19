@@ -246,7 +246,15 @@
         <Divider />
       </section>
 
+      <ActionButtons @download-pdf="handleDownloadPDF" @share-whatsapp="handleShareWhatsApp"
+        @reset-invoice-counter="resetInvoiceCounted" />
+
+      <section>
+        <Divider />
+      </section>
+
       <InvoiceCounter />
+
       <section>
         <Divider />
       </section>
@@ -268,8 +276,7 @@
       <!-- ActionHub: Floating action bar for PDF/WhatsApp sharing -->
 
       <ActionHub :invoice="invoice" :companyLogo="companyLogo" @download-pdf="handleDownloadPDF"
-        @share-whatsapp="handleShareWhatsApp" 
-      @reset-invoice-counter="resetInvoiceCounted" />
+        @share-whatsapp="handleShareWhatsApp" @reset-invoice-counter="resetInvoiceCounted" />
 
     </div>
   </div>
@@ -299,6 +306,7 @@ import ToolKitPreview from '@/components/ToolKitPreview.vue'
 import CurrencySelector from '@/components/CurrencySelector.vue'
 import InvoiceCounter from '@/components/InvoiceCounter.vue'
 import { useInvoiceCounter } from '@/composables/useInvoiceCounter.ts'
+import ActionButtons from '@/components/ActionButtons.vue'
 
 const { incrementInvoiceCount} = useInvoiceCounter()
 
