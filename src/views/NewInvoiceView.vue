@@ -308,6 +308,7 @@ import InvoiceCounter from '@/components/InvoiceCounter.vue'
 import { useInvoiceCounter } from '@/composables/useInvoiceCounter.ts'
 import ActionButtons from '@/components/ActionButtons.vue'
 
+
 const { incrementInvoiceCount} = useInvoiceCounter()
 
 // ===== Types & Interfaces =====
@@ -730,6 +731,7 @@ function handleDownloadPDF() {
   } else {
     console.log('[Invoice] Counter NOT incremented (already counted for this invoice)')
   }
+  resetInvoiceCounted()
 }
 
 /**
@@ -787,6 +789,7 @@ function handleShareWhatsApp() {
   } else {
     console.log('[Invoice] Counter NOT incremented (already counted for this invoice)')
   }
+  resetInvoiceCounted()
 }
 
 // ===== [New Feature] START =====
