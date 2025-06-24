@@ -297,16 +297,16 @@
 // ===== Imports =====
 import { ref, computed, onMounted, watch } from 'vue'
 import localforage from 'localforage'
-import InvoicePreview from '@/components/InvoicePreview.vue'
-import ActionHub from '@/components/ActionHub.vue'
+import InvoicePreview from '@/components/layout/InvoicePreview.vue'
+import ActionHub from '@/components/layout/ActionHub.vue'
 import html2pdf from 'html2pdf.js'
-import AppSwitcher from '../components/AppSwitcher.vue'
+import AppSwitcher from '../components/layout/AppSwitcher.vue'
 import Divider from '@/components/base/Divider.vue'
-import ToolKitPreview from '@/components/ToolKitPreview.vue'
-import CurrencySelector from '@/components/CurrencySelector.vue'
-import InvoiceCounter from '@/components/InvoiceCounter.vue'
+import ToolKitPreview from '@/components/layout/ToolKitPreview.vue'
+import CurrencySelector from '@/components/layout/CurrencySelector.vue'
+import InvoiceCounter from '@/components/layout/InvoiceCounter.vue'
 import { useInvoiceCounter } from '@/composables/useInvoiceCounter.ts'
-import ActionButtons from '@/components/ActionButtons.vue'
+import ActionButtons from '@/components/layout/ActionButtons.vue'
 
 
 const { incrementInvoiceCount} = useInvoiceCounter()

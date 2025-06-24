@@ -92,10 +92,10 @@
 import { useNetworkStatus } from '@/composables/useNetworkStatus'
 import { ref } from 'vue'
 import OfflineIndicator from '@/components/base/OfflineIndicator.vue'
-import StratoneaLogo from '@/components/StratoneaLogo.vue'
+import StratoneaLogo from '@/components/base/StratoneaLogo.vue'
 
-import Footer from '@/components/Footer.vue'
- import Donation from '@/components/Donation.vue'
+import Footer from '@/components/layout/Footer.vue'
+ import Donation from '@/components/donation/Donation.vue'
 
 
   //== To Always See and Edit Donation Control ==//
