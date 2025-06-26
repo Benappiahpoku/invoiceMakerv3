@@ -31,3 +31,6 @@ dist-ssr
 
 # Build output
 dist/
+
+#Vercel
+.vercelFirebaseDeployment
