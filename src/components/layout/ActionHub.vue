@@ -7,20 +7,17 @@
           <font-awesome-icon icon="fa-solid fa-home" class="text-xl" />
           <span>Home</span>
         </router-link>
-        
-        <button 
-          @click="handleNewInvoice" 
-          class="flex items-center space-x-2 text-primary-600 hover:text-primary-700"
-        >
+
+        <button @click="handleNewInvoice" class="flex items-center space-x-2 text-primary-600 hover:text-primary-700">
           <font-awesome-icon icon="fa-solid fa-plus-circle" class="text-xl" />
           <span>New Invoice</span>
         </button>
-        
+
         <button @click="shareWhatsApp" class="flex items-center space-x-2 text-green-600 hover:text-green-700">
           <font-awesome-icon icon="fa-brands fa-whatsapp" class="text-xl" />
           <span>Share WhatsApp</span>
         </button>
-        
+
         <button @click="downloadPDF" class="flex items-center space-x-2 text-primary-600 hover:text-primary-700">
           <font-awesome-icon icon="fa-solid fa-download" class="text-xl" />
           <span>Download PDF</span>
@@ -28,25 +25,27 @@
       </div>
     </div>
 
-    <!-- Mobile View -->
-    <div class="md:hidden flex justify-around items-center h-16">
-      <router-link to="/" class="text-primary-600 hover:text-primary-700">
-        <font-awesome-icon icon="fa-solid fa-home" class="text-2xl" />
+   
+    <!-- Mobile View (Updated with text labels) -->
+    <div class="md:hidden flex justify-around items-center h-20 py-2">
+      <router-link to="/" class="flex flex-col items-center text-primary-600 hover:text-primary-700">
+        <font-awesome-icon icon="fa-solid fa-home" class="text-2xl mb-1" />
+        <span class="text-xs">Home</span>
       </router-link>
-      
-      <button 
-        @click="handleNewInvoice" 
-        class="text-primary-600 hover:text-primary-700"
-      >
-        <font-awesome-icon icon="fa-solid fa-plus-circle" class="text-2xl" />
+
+      <button @click="handleNewInvoice" class="flex flex-col items-center text-primary-600 hover:text-primary-700">
+        <font-awesome-icon icon="fa-solid fa-plus-circle" class="text-2xl mb-1" />
+        <span class="text-xs">New Invoice</span>
       </button>
-      
-      <button @click="shareWhatsApp" class="text-green-600 hover:text-green-700">
-        <font-awesome-icon icon="fa-brands fa-whatsapp" class="text-2xl" />
+
+      <button @click="shareWhatsApp" class="flex flex-col items-center text-green-600 hover:text-green-700">
+        <font-awesome-icon icon="fa-brands fa-whatsapp" class="text-2xl mb-1" />
+        <span class="text-xs">Share WhatsApp</span>
       </button>
-      
-      <button @click="downloadPDF" class="text-primary-600 hover:text-primary-700">
-        <font-awesome-icon icon="fa-solid fa-download" class="text-2xl" />
+
+      <button @click="downloadPDF" class="flex flex-col items-center text-primary-600 hover:text-primary-700">
+        <font-awesome-icon icon="fa-solid fa-download" class="text-2xl mb-1" />
+        <span class="text-xs">Download PDF</span>
       </button>
     </div>
   </div>
