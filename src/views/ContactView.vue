@@ -44,7 +44,7 @@
                 <span class="text-2xl mr-4">💬</span>
                 <div>
                   <h3 class="font-semibold text-gray-800 mb-1">WhatsApp</h3>
-                  <p class="text-gray-600 mb-2">+233-244-314-463</p>
+                  <p class="text-gray-600 mb-2">+233-0594093926</p>
                   <button
                     @click="openWhatsApp"
                     class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-[#25D366] hover:bg-[#128C7E] rounded-md transition-colors duration-300"
