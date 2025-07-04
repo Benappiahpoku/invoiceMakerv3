@@ -126,7 +126,7 @@
     </div>
     <div class="border-b border-gray-200 pt-9 "> </div>
     <div class=" flex pt-3 justify-center gap-2 text-xs text-gray-600">
-                <span>Software developed by TekLumen (+233 594093926)</span>
+                <span>Software developed by TekLumin (+233 594093926)</span>
             </div>
   </div>
   <!-- ===== [New Feature] END ===== -->

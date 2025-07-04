@@ -2,21 +2,8 @@
   <div class="min-h-screen bg-gray-50">
     <!-- Main Content -->
     <main class="w-full max-w-md mx-auto px-2 py-6 sm:max-w-lg sm:px-4 md:max-w-2xl lg:max-w-3xl">
-      <!-- Hero Section -->
-      <section class="text-center mb-16">
-        <h1 class="text-4xl md:text-5xl font-bold text-primary mb-4">
-          Simple, Fast & Free Invoicing for Your Business
-        </h1>
-        <p class="text-xl text-gray-600 mb-8">No Internet? No Problem</p>
-        <p class="text-lg text-gray-500 mb-8">Offline-Ready Anytime, Anywhere.</p>
-        <router-link
-          to="/new-invoice"
-          class="inline-block bg-primary hover:bg-primary-dark text-white font-bold py-4 px-8 rounded-lg transition duration-300"
-        >
-          Create Your Free Invoice
-        </router-link>
-      </section>
-
+   
+<HeroSection />
       <!-- How It Works Section -->
       <section class="mb-16">
         <h2 class="text-3xl font-bold text-center mb-12">How It Works</h2>
@@ -87,6 +74,7 @@
 </template>
 
 <script setup lang="ts">
+import HeroSection from '@/components/layout/HeroSection.vue';
 import NewInvoiceView from './NewInvoiceView.vue'
 </script>
 
