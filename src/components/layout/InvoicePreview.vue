@@ -143,6 +143,7 @@
 
 // ===== Imports & Props =====
 import { computed } from 'vue'
+import { useDefaultCurrency } from '@/utils/useDefaultCurrency'
 
 /**
  * Props for InvoicePreview
@@ -179,6 +180,8 @@ const props = withDefaults(defineProps<{
  * Used everywhere subtotal, VAT, and total are shown.
  */
 const currencySymbol = computed(() => {
+  // Try to get symbol from config
+  const { symbol } = useDefaultCurrency()
   // Map of currency codes to symbols
   const symbols: Record<string, string> = {
     GHS: 'GHS',
@@ -194,7 +197,7 @@ const currencySymbol = computed(() => {
     AUD: 'A$'
   }
   // Default to code if not found
-  return symbols[props.currency] || props.currency + ' '
+  return symbols[props.currency] || symbol || props.currency + ' '
 })
 
 

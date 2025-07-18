@@ -308,6 +308,8 @@ import InvoiceCounter from '@/components/layout/InvoiceCounter.vue'
 import { useInvoiceCounter } from '@/composables/useInvoiceCounter.ts'
 import ActionButtons from '@/components/layout/ActionButtons.vue'
 
+import { useDefaultCurrency } from '@/utils/useDefaultCurrency'
+
 
 const { incrementInvoiceCount} = useInvoiceCounter()
 
@@ -351,6 +353,22 @@ const invoice = ref<Invoice>({
   vatType: 'none' ,// Default VAT type is 'none',
   currency: 'GHS',
 })
+
+/**
+ * On first load, auto-detect and set default currency using browser timezone.
+ * - Only sets if user hasn't chosen before (first visit).
+ * - User can override by changing currency in UI.
+ * - Uses localStorage flag to remember if auto-detect has run.
+ */
+onMounted(() => {
+  const hasSetCurrency = localStorage.getItem('currencyAutoSet')
+  if (!hasSetCurrency) {
+    const detected = useDefaultCurrency()
+    invoice.value.currency = detected.code
+    localStorage.setItem('currencyAutoSet', '1')
+  }
+})
+
 
 // Holds the base64 logo string (or null)
 const companyLogo = ref<string | null>(null)
