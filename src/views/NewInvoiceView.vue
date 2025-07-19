@@ -463,7 +463,7 @@ async function persistCustomVat() {
 const currencySymbol = computed(() => {
   // Map of currency codes to symbols
   const symbols: Record<string, string> = {
-    GHS: 'GHS',
+    GHS: 'GH₵',
     NGN: '₦',
     KES: 'KSh',
     ZAR: 'R',
