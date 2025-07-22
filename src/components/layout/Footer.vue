@@ -75,7 +75,7 @@ import { useToast } from '@/composables/useToast'
 const toast = useToast()
 
 const shareMessage =
-  "Hey! I found this helpful free invoice maker tool. Thought you might like it. https://invoicemaker-eosin.vercel.app/"
+  "Hey! I found this helpful free Invoice maker tool. Thought you might like it. https://invoice.stratonea.com/"
 const whatsAppShareUrl = `https://wa.me/?text=${encodeURIComponent(shareMessage)}`
 
 // ===== [Fix] Updated Toast Function Calls =====
