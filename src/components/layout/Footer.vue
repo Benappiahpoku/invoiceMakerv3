@@ -12,7 +12,13 @@
             <a href="https://wa.me/233594093926" target="_blank" rel="noopener noreferrer"
               class="flex items-center justify-center gap-2 hover:text-primary-200 transition-colors">
               <font-awesome-icon icon="fa-brands fa-whatsapp" class="text-xl" />
-              <span>WhatsApp: +233 59 409 3926</span>
+              <span>Chat on WhatsApp: +233 59 409 3926</span>
+            </a>
+            <!-- Share Free Tool via WhatsApp with pre-filled message -->
+            <a :href="whatsAppShareUrl" target="_blank" rel="noopener noreferrer"
+              class="flex items-center justify-center gap-2 hover:text-primary-200 transition-colors">
+              <font-awesome-icon icon="fa-brands fa-whatsapp" class="text-xl" />
+              <span class="font-bold" >Share this Free Tool</span>
             </a>
 
             <!-- Email -->
@@ -21,6 +27,7 @@
               <font-awesome-icon :icon="['fas', 'envelope']" class="text-xl" />
               <span>stratoneaconsult@gmail.com</span>
             </a>
+
           </div>
         </div>
 
@@ -66,6 +73,10 @@
 import { useToast } from '@/composables/useToast'
 
 const toast = useToast()
+
+const shareMessage =
+  "Hey! I found this helpful free invoice maker tool. Thought you might like it. https://invoicemaker-eosin.vercel.app/"
+const whatsAppShareUrl = `https://wa.me/?text=${encodeURIComponent(shareMessage)}`
 
 // ===== [Fix] Updated Toast Function Calls =====
 async function copyToClipboard(text: string) {
