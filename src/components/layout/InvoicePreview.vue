@@ -79,7 +79,7 @@
             </td>
           </tr>
         </tbody>
-      </table>
+      </table> 
       <!-- Mobile Card List -->
       <div class="sm:hidden flex flex-col gap-4">
         <div v-for="(item, index) in invoice.lineItems" :key="index" class="bg-gray-50 rounded-lg p-4 flex flex-col">
