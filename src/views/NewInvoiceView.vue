@@ -232,6 +232,12 @@
         </form>
       </section>
 
+
+      <Divider />
+<Banner />
+
+
+
       <!-- Preview Section -->
       <section class="mt-16 pt-16 border-t border-gray-200">
         <h2 class="text-3xl font-bold text-center mb-12">Invoice Preview</h2>
@@ -309,6 +315,7 @@ import { useInvoiceCounter } from '@/composables/useInvoiceCounter.ts'
 import ActionButtons from '@/components/layout/ActionButtons.vue'
 
 import { useDefaultCurrency } from '@/utils/useDefaultCurrency'
+import Banner from '@/components/ads/Banner.vue'
 
 
 const { incrementInvoiceCount} = useInvoiceCounter()
