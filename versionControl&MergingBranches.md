@@ -23,3 +23,12 @@ git branch -d dev
 
 <!-- delete branch on github -->
 git push origin --delete dev
+
+### Merging Branches
+
+<!-- make sure you are on the dev branch -->
+commit on dev branch
+
+<!-- make sure you are on the main branch -->
+git checkout main
+type md after changing to the main branch

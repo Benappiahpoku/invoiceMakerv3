@@ -9,7 +9,7 @@
                 <!-- Updated text alignment and width -->
                 <div class="text-center md:text-left mb-8 md:mb-0">
                     <h1 class="text-2xl md:text-5xl font-bold text-primary mb-4 animate-fade-in">
-                        Simple, Fast & Free Invoicing
+                        Smart Free Invoice Maker for Small Businesses
                     </h1>
                     <p class="text-md md:text-xl text-gray-600 mb-4">Works Without Internet</p>
                     <!-- Updated button alignment -->

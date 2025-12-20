@@ -47,7 +47,7 @@ import { ref } from 'vue'
 
 // === Tool List (can be randomized or paginated) ===
 const fullToolList = [
-    // { name: '✅ Invoice Maker', description: 'Create professional invoices with tax and branding', link: 'https://invoicemaker-eosin.vercel.app/' },
+    // { name: '✅ Invoice Maker', description: 'Create professional invoices with tax and branding', link: 'https://freeonlineinvoice.netlify.app/' },
     // { name: '✅ Receipt Maker', description: 'Generate clean, printable receipts in seconds', link: 'https://receiptmaker-ten.vercel.app/' },
     // { name: '🧪 Income Tracker', description: 'Record and manage your daily income streams', link: '#' },
     { name: '📖 7 Quick Actions to Double Your Sales', description: 'Practical steps to boost revenue without spending more - Learn More ...', link: 'https://benappiahpoku.com/7-quick-actions-you-can-do-today-to-double-your-sales/' },
