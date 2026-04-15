@@ -159,7 +159,7 @@
                 <div class="col-span-2">
                   <label class="block md:sr-only text-gray-600 mb-1">Total</label>
                   <p class="text-right font-medium pr-12">
-                    {{ currencySymbol + " "}}{{ formatCurrency(item.quantity * item.price) }}
+                    {{ currencySymbol + " " }}{{ formatCurrency(item.quantity * item.price) }}
                   </p>
                 </div>
               </div>
@@ -234,7 +234,7 @@
 
 
       <Divider />
-<Banner />
+      <Banner />
 
 
 
@@ -318,7 +318,7 @@ import { useDefaultCurrency } from '@/utils/useDefaultCurrency'
 import Banner from '@/components/ads/Banner.vue'
 
 
-const { incrementInvoiceCount} = useInvoiceCounter()
+const { incrementInvoiceCount } = useInvoiceCounter()
 
 // ===== Types & Interfaces =====
 
@@ -357,7 +357,7 @@ const invoice = ref<Invoice>({
   invoiceNumber: '',
   invoiceDate: new Date().toISOString().split('T')[0],
   lineItems: [{ description: '', quantity: 1, price: 0 }],
-  vatType: 'none' ,// Default VAT type is 'none',
+  vatType: 'none',// Default VAT type is 'none',
   currency: 'GHS',
 })
 
@@ -475,6 +475,7 @@ const currencySymbol = computed(() => {
     KES: 'KSh',
     ZAR: 'R',
     XOF: 'CFA ',
+    ZMK: 'ZK',
     INR: '₹',
     USD: '$',
     EUR: '€',
@@ -715,8 +716,8 @@ function handleDownloadPDF() {
 
   // 2. Configure html2pdf options for Ghana mobile users
   const fileName = `Invoice-${invoice.value.invoiceNumber
-      ? `${invoice.value.invoiceNumber}${invoice.value.customerName ? '--' + invoice.value.customerName.trim() : ''}`
-      : invoice.value.customerName?.trim() || 'Customer'
+    ? `${invoice.value.invoiceNumber}${invoice.value.customerName ? '--' + invoice.value.customerName.trim() : ''}`
+    : invoice.value.customerName?.trim() || 'Customer'
     }.pdf`
 
   const opt = {
@@ -747,7 +748,7 @@ function handleDownloadPDF() {
       alert('Could not generate PDF. Please try again or check your internet connection.')
     })
 
-  
+
 
   if (!invoiceCounted.value) {
     incrementInvoiceCount()

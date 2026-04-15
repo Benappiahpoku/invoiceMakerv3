@@ -27,6 +27,7 @@ const currencies = [
     { code: 'KES', label: 'KES - Kenyan Shilling (KSh)' },
     { code: 'ZAR', label: 'ZAR - South African Rand (R)' },
     { code: 'XOF', label: 'XOF - West African CFA Franc (CFA)' },
+    { code: 'ZMK', label: 'ZMK - Zambian Kwacha (ZK)' },
     { code: 'INR', label: 'INR - Indian Rupee (₹)' },
     { code: 'USD', label: 'USD - US Dollar ($)' },
     { code: 'EUR', label: 'EUR - Euro (€)' },

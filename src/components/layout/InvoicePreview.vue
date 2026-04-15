@@ -72,14 +72,14 @@
               {{ item.quantity || 0 }}
             </td>
             <td class="text-right py-3 px-4">
-              {{ currencySymbol+ " "}}{{ formatCurrency(item.price || 0) }}
+              {{ currencySymbol + " " }}{{ formatCurrency(item.price || 0) }}
             </td>
             <td class="text-right py-3 px-4">
               {{ currencySymbol + " " }}{{ formatCurrency((item.quantity || 0) * (item.price || 0)) }}
             </td>
           </tr>
         </tbody>
-      </table> 
+      </table>
       <!-- Mobile Card List -->
       <div class="sm:hidden flex flex-col gap-4">
         <div v-for="(item, index) in invoice.lineItems" :key="index" class="bg-gray-50 rounded-lg p-4 flex flex-col">
@@ -120,14 +120,14 @@
           <span>Total:</span>
           <span>{{ currencySymbol + " " }}{{ formatCurrency(total) }}</span>
         </div>
-       
+
       </div>
-      
+
     </div>
     <div class="border-b border-gray-200 pt-9 "> </div>
     <div class=" flex pt-3 justify-center gap-2 text-xs text-gray-600">
-                <span>Software developed by TekLumin (+233 594093926)</span>
-            </div>
+      <span>Software developed by TekLumin (+233 594093926)</span>
+    </div>
   </div>
   <!-- ===== [New Feature] END ===== -->
 </template>
@@ -189,6 +189,7 @@ const currencySymbol = computed(() => {
     KES: 'KSh',
     ZAR: 'R',
     XOF: 'CFA ',
+    ZMK: 'ZK',
     INR: '₹',
     USD: '$',
     EUR: '€',
